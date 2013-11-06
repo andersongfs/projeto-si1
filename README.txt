@@ -7,3 +7,4 @@ Anderson Gustafson
 Allyson Soares
 Guilherme Steinmuller Pimentel
 Nathan Martins Barreto
+Tiago Gonçalves Silva
