@@ -1,4 +1,4 @@
-package models;
+﻿package models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class CatalogoDisciplinas {
 	 */
 	public void preencherCadeiras(){
 		// adicionar cadeiras...
-		addCadeira("CALC I", 4);
+		addCadeira("CALCULO I", 4);
 		addCadeira("VETORIAL", 4);
 		addCadeira("LPT", 4);
 		addCadeira("PROG1", 4);
