@@ -1,0 +1,127 @@
+@(periodos: List[Periodo],disciplinas: List[Disciplina], errorMessage: String, disciplinaComDependentes: String, periodo: Integer)
+
+@import helper._ 
+<head>
+<meta charset="UTF-8">
+</head>
+
+
+@main("Meu curso") {
+<script type="text/javascript">
+	function confirmaRemocaoComRequisito(nome, periodo){
+		if(confirm("A disciplina " + nome + " é dependência de outras disciplinas.\nDeseja remover mesmo assim?(a remoção dela implicará na remoção de seus pós requisitos)")){
+			 var campoNome =  document.getElementById('nomeCadeira');
+			 var campoPeriodo = document.getElementById('periodo');
+			 var formDelete = document.getElementById('delete');
+			 campoNome.value = nome;
+			 campoPeriodo.value = periodo;
+			 formDelete.action = "@routes.Application.removerCadeiraComPosRequisito()";
+			 formDelete.submit();
+			 
+		}
+	}
+
+	
+</script>
+<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav"
+	role="banner">
+	<div class="navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a href="#" class="navbar-brand">Home</a>
+			</div>
+		</div>
+	</div>
+</header>
+
+<div class="wrapper">
+	<div class="titulo" style="margin-top:50px;">
+		<nome-principal>Meu Curso</nome-principal>
+	</div>
+	@if(errorMessage){
+	<div id="errorMessage" class="alert alert-warning alert-dismissable text-center">
+		@errorMessage <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	</div>
+}
+
+
+	<div id="colunas" style=" width: 135%;">
+		@for(periodo <- periodos){
+			<div id="c@{periodos.indexOf(periodo)+1}" class="coluna" style="text-align:center; width:160px; height:800px ">
+			<span style="margin-top:40px; color:blue;"><b>@{periodos.indexOf(periodo)+1}º Período </b></span>
+			<br>
+			<p style="text-align: center;">
+				@periodo.creditosTotal() Créditos<br>
+				Dificuldade @periodo.getDificuldadePeriodo()
+			</span>
+			<hr style="border: 1px dotted grey;">
+			
+			
+			@for(disciplina <- periodo.getDisciplinas()){
+				<div class="disciplina" style="position:relative;">
+					<nome>@disciplina.getNomeCadeira()</nome><br>
+					<descricao>@disciplina.getCreditos() Créditos</descricao><br>
+					<p style="font-size:small;">Dificuldade: @disciplina.getDificuldade</p>					
+					<form  name="delete" id="delete" method="post" action="@routes.Application.removerCadeira()">
+						<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
+						<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>
+					@if(periodos.indexOf(periodo)!= 0){
+						<button type="submit" class="btn btn-danger btn-xs" style="position:absolute; bottom: 3%; left: 34%;" >
+							<span style="font-size:xx-small;">Remover</span>
+						</button>
+					}
+					</form>
+					
+				</div>
+			}
+			</div>
+		} 
+	</div>
+	
+	<div class="titulo" style="margin-top: 180px;">
+			<nome-principal>Disciplinas Ofertadas (Quantidade: @disciplinas.size())</nome-principal>
+	</div>
+	<br/>
+	
+	
+	<div id="disciplinas" style="margin-left: 50px;">
+		
+		@for(disciplina <- disciplinas){
+			<div class="disciplina float-left">
+				<form id="addCadeira" method="POST" action="@routes.Application.addCadeira()">
+				
+				<nome>@disciplina.getNomeCadeira()</nome><br/>
+				<descricao>@disciplina.getCreditos() creditos<br>Dificuldade @disciplina.getDificuldade()</descricao>
+				<br>
+				<label><small>Período:&nbsp;</small></label><select name="periodo">
+						
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+				</select>
+					<input name="nomeCadeira" type="hidden" value="@disciplina.getNomeCadeira()">
+					<button type="submit" class="btn btn-success btn-xs">
+						 Adicionar
+					</button>
+				</form>
+			</div>
+		}
+	</div>
+	
+	@if(disciplinaComDependentes){
+		<script> 
+			confirmaRemocaoComRequisito('@disciplinaComDependentes', @periodo);  
+		</script>
+	}	
+
+</div>
+
+	
+
+}
