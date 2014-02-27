@@ -20,7 +20,7 @@ public class CatalogoDisciplinas {
 	 */
 	public void preencherCadeiras(){
 		// adicionar cadeiras...
-		addCadeira("CALCULO I", 4);
+		addCadeira("CALC I", 4);
 		addCadeira("VETORIAL", 4);
 		addCadeira("LPT", 4);
 		addCadeira("PROG1", 4);
