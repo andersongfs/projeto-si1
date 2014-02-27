@@ -210,6 +210,25 @@ public class PlanoDeCurso {
 		return false;	
 	}
 	
+	/**
+	 * Realoca disciplinas para os períodos escolhidos
+	 * @param periodoAtual Período que a cadeira está alocada
+	 * @param novoPeriodo	Período para o qual a cadeira sera movida
+	 * @param cadeira	Disciplina a ser realocada
+	 */
+	public void realocaCadeiras(int periodoAtual, int novoPeriodo, String cadeira){
+		Disciplina cadeiraParaMover = catalogoDeDisciplinas.getCadeira(cadeira);
+		periodos.get(periodoAtual).removeDisciplina(cadeiraParaMover);
+		try {
+			periodos.get(novoPeriodo).addCadeira(cadeiraParaMover);
+		} catch (LimitesExcedidosException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JaContemDisciplinaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 	
