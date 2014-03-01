@@ -7,7 +7,7 @@ import java.util.List;
 public class CatalogoDisciplinas {
 	
 	
-	//CREATOR: Nessa classe são criadas as disciplinas pois CatalogoDeDisciplinas contém todas as disciplinas do sistema.
+	//CREATOR: Nessa classe são criadas as disciplinas, pois CatalogoDeDisciplinas contém todas as disciplinas do sistema.
 	private  List<Disciplina> disciplinas;
 
 	public CatalogoDisciplinas() {
