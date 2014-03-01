@@ -1,12 +1,12 @@
 package controllers;
 
+import models.Disciplina;
 import models.JaContemDisciplinaException;
 import models.PlanoDeCurso;
 import models.LimitesExcedidosException;
 import models.PrerequisitosInsuficientesException;
 import play.data.DynamicForm;
 import play.mvc.*;
-
 import views.html.*;
 
 
@@ -74,6 +74,22 @@ public class Application extends Controller {
 		planoDeCurso.removeCadeira(periodo, nomeDisciplina);
 		return index();
 
+	}
+	
+	public static Result realocarCadeira(){
+		DynamicForm formDisciplina = new DynamicForm();
+		final DynamicForm form = formDisciplina.bindFromRequest();
+		
+		final String nomeDisciplina = form.get("nomeCadeira");
+		final int periodo = Integer.parseInt(form.get("periodo"));
+		final int periodoARealocar = Integer.parseInt(form.get("realoca_selecionado"));
+		
+		planoDeCurso.realocaCadeiras(periodo, periodoARealocar-1, nomeDisciplina);
+		
+		
+		
+		return index();
+		
 	}
 
 }

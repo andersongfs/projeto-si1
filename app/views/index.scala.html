@@ -64,11 +64,37 @@
 					<p style="font-size:small;">Dificuldade: @disciplina.getDificuldade</p>					
 					<form  name="delete" id="delete" method="post" action="@routes.Application.removerCadeira()">
 						<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
-						<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>
+						<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>				
+						
 					@if(periodos.indexOf(periodo)!= 0){
 						<button type="submit" class="btn btn-danger btn-xs" style="position:absolute; bottom: 3%; left: 34%;" >
 							<span style="font-size:xx-small;">Remover</span>
 						</button>
+					}
+					</form>
+					
+					<form id="realocarCadeira" method="post" action="@routes.Application.realocarCadeira()">
+						<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
+						<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>	
+					@if(periodos.indexOf(periodo)!= 0){
+					
+					<label><small>Período:&nbsp;</small></label><select name="realoca_selecionado">
+						
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+				</select>
+					<input name="nomeCadeira" type="hidden" value="@disciplina.getNomeCadeira()">
+					<button type="submit" class="btn btn-success btn-xs" style="bottom: 3%; left: 34%;" >
+						<span style="font-size:xx-small;">Realocar</span>
+					</button>
+					
 					}
 					</form>
 					
