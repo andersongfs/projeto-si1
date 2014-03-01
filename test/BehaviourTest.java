@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import models.CatalogoDisciplinas;
 import models.Disciplina;
 import models.JaContemDisciplinaException;
 import models.LimitesExcedidosException;
@@ -12,9 +13,11 @@ import org.junit.*;
 public class BehaviourTest {
 
 	private PlanoDeCurso controlador;
+	private CatalogoDisciplinas catalogo;
 	@Before
 	public void setUp(){
 		controlador = new PlanoDeCurso();
+		catalogo = new CatalogoDisciplinas();
 	}
 	
 	
@@ -44,9 +47,6 @@ public class BehaviourTest {
 	
 	@Test
 	public void removerCadeiraComDependentes() throws LimitesExcedidosException, PrerequisitosInsuficientesException, JaContemDisciplinaException{
-		// Perceba que o teste é quase redundante ao lado do teste acima. 
-		// Se remover uma cadeira com dependente, também removerá uma sem. 
-		// Então a redundância é "para aumentar a qualidade do teste."
 		controlador.adicionaCadeira(1, "CALC II");
 		controlador.adicionaCadeira(2, "PROBABILIDADE");
 		assertTrue(controlador.getPeriodo(1).contains(new Disciplina("CALC II", 4)));
@@ -76,5 +76,17 @@ public class BehaviourTest {
 		} catch (PrerequisitosInsuficientesException pie){
 			fail();
 		}		
+	}
+	
+	@Test
+	public void realocarCadeira() throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException{
+		controlador.adicionaCadeira(1, "CALC II");
+		controlador.adicionaCadeira(2, "PROBABILIDADE");
+		controlador.adicionaCadeira(1, "DISCRETA");
+		assertTrue(controlador.getPeriodo(1).contains(catalogo.getCadeira("DISCRETA")));
+		
+		controlador.realocaCadeiras(1, 2, "DISCRETA");
+		assertFalse(controlador.getPeriodo(1).contains(catalogo.getCadeira("DISCRETA")));
+		assertTrue(controlador.getPeriodo(2).contains(catalogo.getCadeira("DISCRETA")));
 	}
 }
