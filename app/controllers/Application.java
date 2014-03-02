@@ -18,7 +18,7 @@ public class Application extends Controller {
 	public static String errorMessage = "";
 
 	public static Result index() {
-		return ok(index.render(planoDeCurso.getPeriodos(),
+		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(),
 				planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 	}
 
@@ -31,14 +31,13 @@ public class Application extends Controller {
 
 			planoDeCurso.adicionaCadeira(periodo, nome);
 			return index();
-
 		} catch (LimitesExcedidosException e) {
-			return badRequest(index.render(planoDeCurso.getPeriodos(),
+			return badRequest(index.render(planoDeCurso, planoDeCurso.getPeriodos(),
 					planoDeCurso.getCadeirasDisponiveis(),
 					"Limite de Creditos no periodo excedido.", null,
 					new Integer(PERIODO_INEXISTENTE)));
 		} catch (PrerequisitosInsuficientesException e) {
-			return badRequest(index.render(planoDeCurso.getPeriodos(),
+			return badRequest(index.render(planoDeCurso, planoDeCurso.getPeriodos(),
 					planoDeCurso.getCadeirasDisponiveis(),
 					"Você não tem os pré-requisitos necessários.", null,
 					new Integer(PERIODO_INEXISTENTE )));
@@ -56,7 +55,7 @@ public class Application extends Controller {
 		final int periodo = Integer.parseInt(form.get("periodo"));
 
 		if (planoDeCurso.temDependentes(periodo, nomeDisciplina)) {
-			return badRequest(index.render(planoDeCurso.getPeriodos(),
+			return badRequest(index.render(planoDeCurso, planoDeCurso.getPeriodos(),
 					planoDeCurso.getCadeirasDisponiveis(), errorMessage,
 					nomeDisciplina, new Integer(periodo)));
 		} else {
@@ -85,8 +84,6 @@ public class Application extends Controller {
 		final int periodoARealocar = Integer.parseInt(form.get("realoca_selecionado"));
 		
 		planoDeCurso.realocaCadeiras(periodo, periodoARealocar-1, nomeDisciplina);
-		
-		
 		
 		return index();
 		

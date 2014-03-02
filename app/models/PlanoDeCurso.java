@@ -7,7 +7,7 @@ import java.util.List;
 public class PlanoDeCurso {
 
 	private List<Periodo> periodos;
-	final int NUMERO_PERIODOS = 10;
+	final int NUMERO_PERIODOS = 8;
 	
 	//CREATOR: PlanoDeCurso faz uso direto do CatalogoDeDisciplina
 	private CatalogoDisciplinas catalogoDeDisciplinas;
@@ -229,7 +229,15 @@ public class PlanoDeCurso {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
+	public boolean temRequisitosDesalocados(int periodoAtual, String cadeira){
+		Disciplina cadeiraASerVerificada = catalogoDeDisciplinas.getCadeira(cadeira);
+		for (int i = periodoAtual; i < periodos.size(); i++){ 
+			for (Disciplina cadeiraTemp : periodos.get(i).getDisciplinas()){
+				if (cadeiraASerVerificada.ehPreRequisito(cadeiraTemp)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}	
 }

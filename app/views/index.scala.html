@@ -1,4 +1,4 @@
-@(periodos: List[Periodo],disciplinas: List[Disciplina], errorMessage: String, disciplinaComDependentes: String, periodo: Integer)
+@(planoDeCurso: PlanoDeCurso, periodos: List[Periodo],disciplinas: List[Disciplina], errorMessage: String, disciplinaComDependentes: String, periodo: Integer)
 
 @import helper._ 
 <head>
@@ -20,7 +20,6 @@
 			 
 		}
 	}
-
 	
 </script>
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav"
@@ -58,8 +57,11 @@
 			
 			
 			@for(disciplina <- periodo.getDisciplinas()){
-				<div class="disciplina" style="position:relative;">
-					<nome>@disciplina.getNomeCadeira()</nome><br>
+				@if(planoDeCurso.temRequisitosDesalocados(periodos.indexOf(periodo),disciplina.getNomeCadeira())){
+					<div class="disciplina" style="position:relative; background: #FF7373;">
+				}else{
+					<div class="disciplina" style="position:relative;">
+				}	<nome>@disciplina.getNomeCadeira()</nome><br>
 					<descricao>@disciplina.getCreditos() Créditos</descricao><br>
 					<p style="font-size:small;">Dificuldade: @disciplina.getDificuldade</p>					
 					<form  name="delete" id="delete" method="post" action="@routes.Application.removerCadeira()">
@@ -87,8 +89,6 @@
 						<option value="6">6</option>
 						<option value="7">7</option>
 						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
 				</select>
 					<input name="nomeCadeira" type="hidden" value="@disciplina.getNomeCadeira()">
 					<button type="submit" class="btn btn-success btn-xs" style="bottom: 3%; left: 34%;" >
@@ -128,8 +128,6 @@
 						<option value="6">6</option>
 						<option value="7">7</option>
 						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
 				</select>
 					<input name="nomeCadeira" type="hidden" value="@disciplina.getNomeCadeira()">
 					<button type="submit" class="btn btn-success btn-xs">
