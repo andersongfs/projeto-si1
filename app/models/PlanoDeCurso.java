@@ -3,9 +3,17 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+
+
 
 public class PlanoDeCurso {
 
+	
+	
 	private List<Periodo> periodos;
 	final int NUMERO_PERIODOS = 8;
 	
