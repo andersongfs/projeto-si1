@@ -4,11 +4,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Disciplina {
+import javassist.SerialVersionUID;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import com.google.common.base.Objects;
+
+import play.data.validation.Constraints;
+import play.db.ebean.Model;
+
+@Entity
+public class Disciplina extends Model implements Comparable<Disciplina>{
+	/**
+	 * 
+	 */
+	
+
+	private static final long SerialVersionUID = 1L;
+	
+	@Id
+	Long id;
+	
 	/*INFORMATION EXPERT: Disciplina precisa saber seu nome, pois é uma
 	 * propriedade da disciplina.
 	*/
+	
+	@Constraints.Required
+	@Column(unique = true, nullable=false)
 	private String nomeCadeira;
 	
 	/*INFORMATION EXPERT: Disciplina precisa saber seus créditos, pois é uma
@@ -19,6 +48,9 @@ public class Disciplina {
 	/*INFORMATION EXPERT: Disciplina precisa saber seus requisitos, pois é uma
 	 * responsabilidade da disciplina conhecer seus requisitos.
 	*/
+	
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinTable(name = "cadeira_requisito", joinColumns = {@JoinColumn (name = "fk_cadeira")}, inverseJoinColumns = {@JoinColumn(name = "fk_requisito")})
 	private List<Disciplina> requisitos;
 	
 	// information expert
@@ -136,4 +168,49 @@ public class Disciplina {
 	public void setDificuldade(int dificuldade) {
 		this.dificuldade = dificuldade;
 	}
+	
+	public static Finder<Long,Disciplina> find = new Finder<Long,Disciplina>(
+		    Long.class, Disciplina.class
+	); 
+	
+	public static void create(Disciplina disciplina) {
+		disciplina.save();
+	}
+
+	public static void delete(Long id) {
+		find.ref(id).delete();
+	}
+
+	public static void atualizar(Long id) {
+		Disciplina disciplina = find.ref(id);
+		disciplina.update();
+	}
+	
+	public int compareTo(Disciplina disciplina) {
+		return getNomeCadeira().compareTo(disciplina.getNomeCadeira());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(getNomeCadeira(), creditos);
+	}
+
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		Disciplina other = (Disciplina) obj;
+//		return Objects.equal(this.getCreditos(), other.getCreditos())
+//				&& Objects.equal(this.getNomeCadeira(), other.getNomeCadeira());
+//	}
+
+//	@Override
+//	public String toString() {
+//		return "Cadeira [id=" + id + ", nome=" + nome + ", periodo=" + periodo
+//				+ "]";
+//	}
 }
