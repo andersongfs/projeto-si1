@@ -3,16 +3,34 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 
 
+import play.db.ebean.Model;
 
-public class PlanoDeCurso {
 
-	
+
+@Entity
+public class PlanoDeCurso extends Model{
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Long id;
+
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinTable(name = "plano_periodo",
+    joinColumns = {@JoinColumn (name = "fk_plano")}, inverseJoinColumns = {@JoinColumn(name = "fk_periodo")})
 	
 	private List<Periodo> periodos;
 	final int NUMERO_PERIODOS = 8;
@@ -247,5 +265,27 @@ public class PlanoDeCurso {
 			}
 		}
 		return false;
+	}
+	
+	public Long getId(){
+		return id;
 	}	
+
+	public static Finder<Long,PlanoDeCurso> find = new Finder<Long,PlanoDeCurso>(
+			Long.class, PlanoDeCurso.class
+				);
+	
+	public static void create(PlanoDeCurso p) {
+		p.save();
+	}
+
+	public static void delete(Long id) {
+		find.ref(id).delete();
+	}
+
+	public static void atualizar(Long id) {
+		PlanoDeCurso p = find.ref(id);
+		p.update();
+	}
+	
 }

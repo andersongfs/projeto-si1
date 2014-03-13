@@ -3,11 +3,35 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Periodo {
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import play.db.ebean.Model;
+
+
+
+
+@Entity
+public class Periodo extends Model {
 	public final int LIMITE_CREDITOS = 28;
-	
+	private static final long serialVersionUID = 1L;
 	//INFORMATION EXPERT: O periodo usa e gerencia a disciplina então ele precisa saber quais disciplinas ele contém.
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Long id;
+	
+	
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinTable(name = "periodo_cadeira",
+    joinColumns = {@JoinColumn (name = "fk_periodo")}, inverseJoinColumns = {@JoinColumn(name = "fk_cadeira")})
 	private List<Disciplina> disciplinas;
 	
 	public Periodo() {
@@ -90,5 +114,40 @@ public class Periodo {
 	public boolean contains(Disciplina disciplina) {
 		return disciplinas.contains(disciplina);
 	}
+	
+	
+	
+	
+	
 
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public static Finder<Long,Periodo> find = new Finder<Long,Periodo>(
+		    Long.class, Periodo.class
+	); 
+	
+	public static void create(Periodo p) {
+		p.save();
+	}
+
+	public static void delete(Long id) {
+		find.ref(id).delete();
+	}
+
+	public static void atualizar(Long id) {
+		Periodo p = find.ref(id);
+		p.update();
+	}
+	
+	
+	
+	
+	
 }
