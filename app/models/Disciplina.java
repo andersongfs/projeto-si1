@@ -55,7 +55,7 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	
 	// information expert
 	private int dificuldade;
-	
+	private int periodoDefault; 
 	/**
 	 * Construtor de Disciplina
 	 * @param cadeira
@@ -68,11 +68,12 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 		setDificuldade(1 + new Random().nextInt(5)); // dificuldade de 0 a 5
 	}
 
-	public Disciplina(String cadeira, int creditos, int dificuldade) {
+	public Disciplina(String cadeira, int creditos, int dificuldade, int periodoDefault) {
 		setNomeCadeira(cadeira);
 		requisitos = new ArrayList<Disciplina>();
 		setCreditos(creditos);
 		setDificuldade(dificuldade); // dificuldade usada no sistema é de 0 a 5
+		setPeriodoDefault(periodoDefault);
 	}
 	
 	/**
@@ -193,6 +194,14 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(getNomeCadeira(), creditos);
+	}
+
+	public int getPeriodoDefault() {
+		return periodoDefault;
+	}
+
+	public void setPeriodoDefault(int periodoDefault) {
+		this.periodoDefault = periodoDefault;
 	}
 
 //	@Override

@@ -1,5 +1,9 @@
 package controllers;
 
+import java.util.List;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import models.Disciplina;
 import models.JaContemDisciplinaException;
 import models.PlanoDeCurso;
@@ -9,17 +13,31 @@ import play.data.DynamicForm;
 import play.mvc.*;
 import views.html.*;
 
-
-
 public class Application extends Controller {
 	private static final int PERIODO_INEXISTENTE = -1;
-	
-	public static PlanoDeCurso planoDeCurso = new PlanoDeCurso();
+
+	public static PlanoDeCurso planoDeCurso;
 	public static String errorMessage = "";
 
-	public static Result index() {
-		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(),
-				planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
+	public static Result index() throws PrerequisitosInsuficientesException,
+			LimitesExcedidosException, JaContemDisciplinaException {
+		List<PlanoDeCurso> planos = planoDeCurso.find.all();
+
+		if (planos.isEmpty()) {
+			planoDeCurso = new PlanoDeCurso();
+			System.out.println("Plano Criado");
+			planoDeCurso.save();
+
+		} else {
+			planoDeCurso = planos.get(0); // pega o primeiro e unico plano
+			for (Disciplina d : planoDeCurso.getCadeirasDisponiveis()) {
+					planoDeCurso.adicionaCadeira(d.getPeriodoDefault(), d.getNomeCadeira());
+					planoDeCurso.update();
+				}
+			}
+			System.out.println("Plano Populadoss");
+		
+		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 	}
 
 	public static Result addCadeira() {
@@ -32,30 +50,35 @@ public class Application extends Controller {
 			planoDeCurso.adicionaCadeira(periodo, nome);
 			return index();
 		} catch (LimitesExcedidosException e) {
-			return badRequest(index.render(planoDeCurso, planoDeCurso.getPeriodos(),
+			return badRequest(index.render(planoDeCurso,
+					planoDeCurso.getPeriodos(),
 					planoDeCurso.getCadeirasDisponiveis(),
 					"Limite de Creditos no periodo excedido.", null,
 					new Integer(PERIODO_INEXISTENTE)));
 		} catch (PrerequisitosInsuficientesException e) {
-			return badRequest(index.render(planoDeCurso, planoDeCurso.getPeriodos(),
+			return badRequest(index.render(planoDeCurso,
+					planoDeCurso.getPeriodos(),
 					planoDeCurso.getCadeirasDisponiveis(),
 					"Você não tem os pré-requisitos necessários.", null,
-					new Integer(PERIODO_INEXISTENTE )));
-		}catch (Exception e) {
+					new Integer(PERIODO_INEXISTENTE)));
+		} catch (Exception e) {
 			// pass
 		}
 		return TODO;
 
 	}
 
-	public static Result removerCadeira() {
+	public static Result removerCadeira()
+			throws PrerequisitosInsuficientesException,
+			LimitesExcedidosException, JaContemDisciplinaException {
 		DynamicForm formDisciplina = new DynamicForm();
 		final DynamicForm form = formDisciplina.bindFromRequest();
 		final String nomeDisciplina = form.get("nomeCadeira");
 		final int periodo = Integer.parseInt(form.get("periodo"));
 
 		if (planoDeCurso.temDependentes(periodo, nomeDisciplina)) {
-			return badRequest(index.render(planoDeCurso, planoDeCurso.getPeriodos(),
+			return badRequest(index.render(planoDeCurso,
+					planoDeCurso.getPeriodos(),
 					planoDeCurso.getCadeirasDisponiveis(), errorMessage,
 					nomeDisciplina, new Integer(periodo)));
 		} else {
@@ -64,7 +87,9 @@ public class Application extends Controller {
 		}
 	}
 
-	public static Result removerCadeiraComPosRequisito() {
+	public static Result removerCadeiraComPosRequisito()
+			throws PrerequisitosInsuficientesException,
+			LimitesExcedidosException, JaContemDisciplinaException {
 		DynamicForm formDisciplina = new DynamicForm();
 		final DynamicForm form = formDisciplina.bindFromRequest();
 		final String nomeDisciplina = form.get("nomeCadeira");
@@ -74,19 +99,23 @@ public class Application extends Controller {
 		return index();
 
 	}
-	
-	public static Result realocarCadeira(){
+
+	public static Result realocarCadeira()
+			throws PrerequisitosInsuficientesException,
+			LimitesExcedidosException, JaContemDisciplinaException {
 		DynamicForm formDisciplina = new DynamicForm();
 		final DynamicForm form = formDisciplina.bindFromRequest();
-		
+
 		final String nomeDisciplina = form.get("nomeCadeira");
 		final int periodo = Integer.parseInt(form.get("periodo"));
-		final int periodoARealocar = Integer.parseInt(form.get("realoca_selecionado"));
-		
-		planoDeCurso.realocaCadeiras(periodo, periodoARealocar-1, nomeDisciplina);
-		
+		final int periodoARealocar = Integer.parseInt(form
+				.get("realoca_selecionado"));
+
+		planoDeCurso.realocaCadeiras(periodo, periodoARealocar - 1,
+				nomeDisciplina);
+
 		return index();
-		
+
 	}
 
 }

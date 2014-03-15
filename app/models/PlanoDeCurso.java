@@ -61,12 +61,16 @@ public class PlanoDeCurso extends Model{
 		}
 		try {
 			// Preenche o primeiro periodo com as cadeiras obrigatórias
-			adicionaCadeira(0, "CALC I");
-			adicionaCadeira(0, "PROG1");
-			adicionaCadeira(0, "LPROG1");
-			adicionaCadeira(0, "IC");
-			adicionaCadeira(0, "LPT");
-			adicionaCadeira(0, "VETORIAL");
+			
+			for(Disciplina d : catalogoDeDisciplinas.getCadeiras() ){
+				adicionaCadeira(d.getNomeCadeira());
+			}
+			//			adicionaCadeira("Calculo I");
+//			adicionaCadeira(0, "PROG1");
+//			adicionaCadeira(0, "LPROG1");
+//			adicionaCadeira(0, "IC");
+//			adicionaCadeira(0, "LPT");
+//			adicionaCadeira(0, "VETORIAL");
 		} catch (Exception e){
 			e.printStackTrace();
 		}
@@ -175,6 +179,24 @@ public class PlanoDeCurso extends Model{
 		}
 		addCadeiraNoPeriodo(periodo, c);
 	}
+	
+	public void adicionaCadeira(String cadeira) throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException {
+		Disciplina c = catalogoDeDisciplinas.getCadeira(cadeira);
+		
+//		for (Disciplina req: c.getRequisitos()){
+//			// varre os periodos anteriores vendo se os pre-requisitos estão adicionados.
+//			boolean pagavel = false;
+//			for (int p = 0; p < c.getPeriodoDefault(); p++){
+//				if (contemDisciplina(p,req)){
+//					pagavel = true; 
+//				}
+//			}
+//			if (!pagavel) {
+//				throw new PrerequisitosInsuficientesException();
+//			}
+//		}
+		addCadeiraNoPeriodo(c.getPeriodoDefault(), c);
+	}
 
 	/**
 	 * Remove uma cadeira de um determinado periodo. 
@@ -247,6 +269,7 @@ public class PlanoDeCurso extends Model{
 		periodos.get(periodoAtual).removeDisciplina(cadeiraParaMover);
 		try {
 			periodos.get(novoPeriodo).addCadeira(cadeiraParaMover);
+			//catalogoDeDisciplinas.getCadeira(cadeira).setPeriodoDefault(novoPeriodo);
 		} catch (LimitesExcedidosException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
