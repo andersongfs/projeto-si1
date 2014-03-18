@@ -11,10 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
 
 @Entity
-public class CatalogoDisciplinas {
+public class CatalogoDisciplinas extends Model {
 
 	// CREATOR: Nessa classe são criadas as disciplinas, pois
 	// CatalogoDeDisciplinas contém todas as disciplinas do sistema.
