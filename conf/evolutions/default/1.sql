@@ -3,11 +3,18 @@
 
 # --- !Ups
 
+create table catalogo_disciplinas (
+  id                        bigint not null,
+  constraint pk_catalogo_disciplinas primary key (id))
+;
+
 create table disciplina (
   id                        bigint not null,
+  catalogo_disciplinas_id   bigint not null,
   nome_cadeira              varchar(255) not null,
   creditos                  integer,
   dificuldade               integer,
+  periodo                   integer,
   constraint uq_disciplina_nome_cadeira unique (nome_cadeira),
   constraint pk_disciplina primary key (id))
 ;
@@ -21,6 +28,7 @@ create table periodo (
 create table plano_de_curso (
   id                        bigint not null,
   numero_periodos           integer,
+  catalogo_de_disciplinas_id bigint,
   constraint pk_plano_de_curso primary key (id))
 ;
 
@@ -42,12 +50,18 @@ create table plano_periodo (
   fk_periodo                     bigint not null,
   constraint pk_plano_periodo primary key (fk_plano, fk_periodo))
 ;
+create sequence catalogo_disciplinas_seq;
+
 create sequence disciplina_seq;
 
 create sequence periodo_seq;
 
 create sequence plano_de_curso_seq;
 
+alter table disciplina add constraint fk_disciplina_catalogo_discipl_1 foreign key (catalogo_disciplinas_id) references catalogo_disciplinas (id) on delete restrict on update restrict;
+create index ix_disciplina_catalogo_discipl_1 on disciplina (catalogo_disciplinas_id);
+alter table plano_de_curso add constraint fk_plano_de_curso_catalogoDeDi_2 foreign key (catalogo_de_disciplinas_id) references catalogo_disciplinas (id) on delete restrict on update restrict;
+create index ix_plano_de_curso_catalogoDeDi_2 on plano_de_curso (catalogo_de_disciplinas_id);
 
 
 
@@ -67,6 +81,8 @@ alter table plano_periodo add constraint fk_plano_periodo_periodo_02 foreign key
 
 SET REFERENTIAL_INTEGRITY FALSE;
 
+drop table if exists catalogo_disciplinas;
+
 drop table if exists disciplina;
 
 drop table if exists cadeira_requisito;
@@ -80,6 +96,8 @@ drop table if exists plano_de_curso;
 drop table if exists plano_periodo;
 
 SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists catalogo_disciplinas_seq;
 
 drop sequence if exists disciplina_seq;
 

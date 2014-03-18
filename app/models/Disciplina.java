@@ -10,6 +10,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -30,6 +32,7 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	private static final long SerialVersionUID = 1L;
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 	
 	/*INFORMATION EXPERT: Disciplina precisa saber seu nome, pois é uma
@@ -37,7 +40,7 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	*/
 	
 	@Constraints.Required
-	@Column(unique = true, nullable=false)
+	@Column(unique=true, nullable=false)
 	private String nomeCadeira;
 	
 	/*INFORMATION EXPERT: Disciplina precisa saber seus créditos, pois é uma
@@ -55,7 +58,7 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	
 	// information expert
 	private int dificuldade;
-	private int periodoDefault; 
+	private int periodo; 
 	/**
 	 * Construtor de Disciplina
 	 * @param cadeira
@@ -68,12 +71,12 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 		setDificuldade(1 + new Random().nextInt(5)); // dificuldade de 0 a 5
 	}
 
-	public Disciplina(String cadeira, int creditos, int dificuldade, int periodoDefault) {
+	public Disciplina(String cadeira, int creditos, int dificuldade, int periodo) {
 		setNomeCadeira(cadeira);
 		requisitos = new ArrayList<Disciplina>();
 		setCreditos(creditos);
 		setDificuldade(dificuldade); // dificuldade usada no sistema é de 0 a 5
-		setPeriodoDefault(periodoDefault);
+		setPeriodo(periodo);
 	}
 	
 	/**
@@ -196,12 +199,16 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 		return Objects.hashCode(getNomeCadeira(), creditos);
 	}
 
-	public int getPeriodoDefault() {
-		return periodoDefault;
+	public int getPeriodo() {
+		return periodo;
 	}
 
-	public void setPeriodoDefault(int periodoDefault) {
-		this.periodoDefault = periodoDefault;
+	public void setPeriodo(int periodo) {
+		this.periodo = periodo;
+	}
+	
+	public Comparable<Long> getId(){
+		return id;
 	}
 
 //	@Override

@@ -2,8 +2,7 @@ package controllers;
 
 import java.util.List;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
+import models.CatalogoDisciplinas;
 import models.Disciplina;
 import models.JaContemDisciplinaException;
 import models.PlanoDeCurso;
@@ -31,11 +30,12 @@ public class Application extends Controller {
 		} else {
 			planoDeCurso = planos.get(0); // pega o primeiro e unico plano
 			for (Disciplina d : planoDeCurso.getCadeirasDisponiveis()) {
-					planoDeCurso.adicionaCadeira(d.getPeriodoDefault(), d.getNomeCadeira());
+					planoDeCurso.adicionaCadeira(d.getPeriodo(), d.getNomeCadeira());
 					planoDeCurso.update();
 				}
-			}
 			System.out.println("Plano Populadoss");
+			}
+			
 		
 		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 	}
@@ -110,11 +110,11 @@ public class Application extends Controller {
 		final int periodo = Integer.parseInt(form.get("periodo"));
 		final int periodoARealocar = Integer.parseInt(form
 				.get("realoca_selecionado"));
-
+		
 		planoDeCurso.realocaCadeiras(periodo, periodoARealocar - 1,
 				nomeDisciplina);
-
-		return index();
+		planoDeCurso.update();
+		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 
 	}
 

@@ -3,10 +3,27 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import play.db.ebean.Model.Finder;
+
+@Entity
 public class CatalogoDisciplinas {
 
 	// CREATOR: Nessa classe são criadas as disciplinas, pois
 	// CatalogoDeDisciplinas contém todas as disciplinas do sistema.
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Long id;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<Disciplina> disciplinas;
 
 	public CatalogoDisciplinas() {
@@ -277,5 +294,13 @@ public class CatalogoDisciplinas {
 	public List<Disciplina> getCadeiras() {
 		return disciplinas;
 	}
+	
+	public Long getId(){
+		return id;
+	}
+	
+	public static Finder<Long,CatalogoDisciplinas> find = new Finder<Long,CatalogoDisciplinas>(
+		    Long.class, CatalogoDisciplinas.class
+	); 
 
 }

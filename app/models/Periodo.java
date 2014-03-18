@@ -115,11 +115,6 @@ public class Periodo extends Model {
 		return disciplinas.contains(disciplina);
 	}
 	
-	
-	
-	
-	
-
 	public Long getId() {
 		return id;
 	}
