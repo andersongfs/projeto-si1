@@ -21,12 +21,10 @@ public class Application extends Controller {
 	public static Result index() throws PrerequisitosInsuficientesException,
 			LimitesExcedidosException, JaContemDisciplinaException {
 		PlanoDeCurso plano = planoDeCurso.find.findUnique();
-		System.out.println(plano);
 		if (plano == null) {
 			CatalogoDisciplinas catalogo = new CatalogoDisciplinas();
 			catalogo.save();
 			planoDeCurso = new PlanoDeCurso(catalogo);
-			System.out.println("Plano Criado");
 			planoDeCurso.save();
 
 		} else {
@@ -36,7 +34,6 @@ public class Application extends Controller {
 					planoDeCurso.adicionaCadeira(d.getPeriodo(), d.getNomeCadeira());
 					planoDeCurso.update();
 				}
-			System.out.println("Plano Recuperado");
 			}
 		}		
 		
