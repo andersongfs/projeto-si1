@@ -32,12 +32,13 @@ public class Application extends Controller {
 		} else {
 			//planoDeCurso = planos.get(0); // pega o primeiro e unico plano
 			for (Disciplina d : planoDeCurso.getCadeirasDisponiveis()) {
+				if (d.isAlocada()){
 					planoDeCurso.adicionaCadeira(d.getPeriodo(), d.getNomeCadeira());
 					planoDeCurso.update();
 				}
-			System.out.println("Plano Populadoss");
+			System.out.println("Plano Recuperado");
 			}
-			
+		}		
 		
 		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 	}
@@ -98,6 +99,7 @@ public class Application extends Controller {
 		final int periodo = Integer.parseInt(form.get("periodo"));
 
 		planoDeCurso.removeCadeira(periodo, nomeDisciplina);
+		planoDeCurso.update();
 		return index();
 
 	}

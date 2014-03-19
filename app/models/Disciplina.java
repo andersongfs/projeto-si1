@@ -59,6 +59,7 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	// information expert
 	private int dificuldade;
 	private int periodo; 
+	private boolean alocada; 
 	/**
 	 * Construtor de Disciplina
 	 * @param cadeira
@@ -77,6 +78,7 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 		setCreditos(creditos);
 		setDificuldade(dificuldade); // dificuldade usada no sistema é de 0 a 5
 		setPeriodo(periodo);
+		alocada = true;
 	}
 	
 	/**
@@ -209,6 +211,14 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	
 	public Comparable<Long> getId(){
 		return id;
+	}
+	
+	public boolean isAlocada(){
+		return alocada;
+	}
+	
+	public void setAlocada(boolean alocacao){
+		this.alocada = alocacao;
 	}
 
 //	@Override

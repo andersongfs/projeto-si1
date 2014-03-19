@@ -234,18 +234,19 @@ public class PlanoDeCurso extends Model {
 	 *            String contendo a identificação da Disciplina a ser removida
 	 */
 	public void removeCadeira(int periodo, String disciplina) {
-
-		Disciplina disciplinaARemover = catalogoDeDisciplinas
-				.getCadeira(disciplina);
-
-		getPeriodo(periodo).removeDisciplina(disciplinaARemover);
-
+		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,
+				catalogoDeDisciplinas.getId());
+		Disciplina disciplinaARemover = cat.getCadeira(disciplina);
+		disciplinaARemover = Ebean.find(Disciplina.class, disciplinaARemover.getId());
+		periodos.get(periodo).removeDisciplina(disciplinaARemover);
+		disciplinaARemover.setAlocada(false);
+		Ebean.save(disciplinaARemover);
+		
 		if (temDependentes(periodo, disciplina)) {
 			// A recursão nessa parte do código garante que todos os dependentes
 			// serão removidos do plano de curso
 			removerDependentes(periodo, disciplina);
 		}
-
 		disciplinasNaoAlocadas.add(disciplinaARemover);
 	}
 
@@ -260,8 +261,9 @@ public class PlanoDeCurso extends Model {
 	private void removerDependentes(int periodo, String disciplina) {
 		// para cada cadeira que tem o prerequisito
 		// retirado da grade também sai da grade;
-		Disciplina disciplinaARemover = catalogoDeDisciplinas
-				.getCadeira(disciplina);
+		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,
+				catalogoDeDisciplinas.getId());
+		Disciplina disciplinaARemover = cat.getCadeira(disciplina);
 		for (int p = periodo + 1; p < getPeriodos().size(); p++) {
 			for (int d = getNumeroDeDisciplinas(p) - 1; d >= 0; d--) {
 				Disciplina cadTemp = getPeriodo(p).getDisciplinas().get(d);
@@ -313,27 +315,15 @@ public class PlanoDeCurso extends Model {
 	public void realocaCadeiras(int periodoAtual, int novoPeriodo,
 			String cadeira) throws LimitesExcedidosException,
 			JaContemDisciplinaException {
-		// Disciplina d = Ebean.find(Disciplina.class, cadeira);
-		// d.setPeriodoDefault(periodos.indexOf(Ebean.find(Periodo.class,
-		// novoPeriodo).getId()));
-		// Ebean.save(d);
-		// Disciplina cadeiraParaMover = ;
-		// Disciplina cadeiraParaRealocar =
-		// catalogoDeDisciplinas.getCadeira(cadeira);
-		// periodos.get(periodoAtual).removeDisciplina(cadeiraParaRealocar);
-		// periodos.get(periodoAtual).update();
-		// try {
-		// periodos.get(novoPeriodo).addCadeira(cadeiraParaRealocar);
-		// cadeiraParaRealocar.setPeriodoDefault(novoPeriodo);
-		// periodos.get(novoPeriodo).update();
-		// } catch (LimitesExcedidosException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (JaContemDisciplinaException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		moveDisciplina(periodoAtual, novoPeriodo, cadeira);
+		
+		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,
+				catalogoDeDisciplinas.getId());
+		Disciplina d = cat.getCadeira(cadeira);
+		d = Ebean.find(Disciplina.class, d.getId());
+		periodos.get(periodoAtual).removeDisciplina(d);
+		d.setPeriodo(Ebean.find(Periodo.class, novoPeriodo).getId().intValue());
+		periodos.get(novoPeriodo).addCadeira(d);
+		Ebean.save(d);
 	}
 
 	public boolean temRequisitosDesalocados(int periodoAtual, String cadeira) {
@@ -376,26 +366,4 @@ public class PlanoDeCurso extends Model {
 	public CatalogoDisciplinas getCatalogo() {
 		return catalogoDeDisciplinas;
 	}
-
-	public void moveDisciplina(int periodoAtual, int periodo,
-			String nomeDisciplina) throws LimitesExcedidosException,
-			JaContemDisciplinaException {
-		// if (idPeriodo >= 1 && idPeriodo < 11){
-		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,
-				catalogoDeDisciplinas.getId());
-		PlanoDeCurso plano = Ebean.find(PlanoDeCurso.class, this.getId());
-		// CatalogoDisciplinas cat = plano.getCatalogo();
-		System.out.println(cat.toString());
-		Disciplina d = cat.getCadeira(nomeDisciplina);
-		System.out.println(d.getNomeCadeira());
-		System.out.println(d.getId());
-		d = Ebean.find(Disciplina.class, d.getId());
-		periodos.get(periodoAtual).removeDisciplina(d);
-		System.out.println(d.getNomeCadeira());
-		d.setPeriodo(Ebean.find(Periodo.class, periodo).getId().intValue());
-		periodos.get(periodo).addCadeira(d);
-		Ebean.save(d);
-		// }
-	}
-
 }
