@@ -24,17 +24,22 @@ public class Application extends Controller {
 		if (plano == null) {
 			CatalogoDisciplinas catalogo = new CatalogoDisciplinas();
 			catalogo.save();
-			planoDeCurso = new PlanoDeCurso(catalogo);
-			planoDeCurso.save();
+			plano = new PlanoDeCurso(catalogo);
+			planoDeCurso = plano;
+			planoDeCurso.save();			
 
 		} else {
-			//planoDeCurso = planos.get(0); // pega o primeiro e unico plano
-			for (Disciplina d : planoDeCurso.getCadeirasDisponiveis()) {
-				if (d.isAlocada()){
+			planoDeCurso = plano;
+			System.out.println("else " + planoDeCurso.getCadeirasDisponiveis());
+			for (Disciplina d : planoDeCurso.getCatalogo().getCadeiras()) {
+				if (d.isAlocada() && !planoDeCurso.getPeriodo(d.getPeriodo()).contains(d)){
 					planoDeCurso.adicionaCadeira(d.getPeriodo(), d.getNomeCadeira());
 					planoDeCurso.update();
+				}else if (!d.isAlocada() && !planoDeCurso.getCadeirasDisponiveis().contains(d)){
+					planoDeCurso.addNasNaoAlocadas(d);	
 				}
 			}
+			
 		}		
 		
 		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
@@ -83,6 +88,7 @@ public class Application extends Controller {
 					nomeDisciplina, new Integer(periodo)));
 		} else {
 			planoDeCurso.removeCadeira(periodo, nomeDisciplina);
+			planoDeCurso.update();
 			return index();
 		}
 	}

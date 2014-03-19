@@ -39,7 +39,7 @@ public class PlanoDeCurso extends Model {
 	 * INFORMATION EXPERT: PlanoDeCurso usa as disciplinas não alocadas para
 	 * decidir quem pode ser alocada, então ela precisa conhecer as disciplinas.
 	 */
-
+	@ManyToMany
 	private List<Disciplina> disciplinasNaoAlocadas;
 
 	public PlanoDeCurso() {
@@ -65,7 +65,9 @@ public class PlanoDeCurso extends Model {
 			// Preenche o primeiro periodo com as cadeiras obrigatórias
 
 			for (Disciplina d : catalogoDeDisciplinas.getCadeiras()) {
-				adicionaCadeira(d.getNomeCadeira());
+				if(d.isAlocada()){
+					adicionaCadeira(d.getNomeCadeira());
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,7 +79,9 @@ public class PlanoDeCurso extends Model {
 	 */
 	private void popularDisciplinasNaoAlocadas() {
 		for (Disciplina d : catalogoDeDisciplinas.getCadeiras()) {
-			disciplinasNaoAlocadas.add(d);
+			if(!d.isAlocada()){
+				disciplinasNaoAlocadas.add(d);
+			}
 		}
 	}
 
@@ -154,11 +158,11 @@ public class PlanoDeCurso extends Model {
 	 * @return uma Lista com as Disciplinas disponíveis para o plano de curso.
 	 */
 	public List<Disciplina> getCadeirasDisponiveis() {
-		for (Periodo p : getPeriodos()) {
-			for (Disciplina d : p.getDisciplinas()) {
-				disciplinasNaoAlocadas.remove(d);
-			}
-		}
+//		for (Periodo p : getPeriodos()) {
+//			for (Disciplina d : p.getDisciplinas()) {
+//				disciplinasNaoAlocadas.remove(d);
+//			}
+//		}
 		return disciplinasNaoAlocadas;
 	}
 
@@ -197,6 +201,7 @@ public class PlanoDeCurso extends Model {
 			}
 		}
 		addCadeiraNoPeriodo(periodo, disciplina);
+		disciplinasNaoAlocadas.remove(disciplina);
 		disciplina.setAlocada(true);
 		Ebean.save(disciplina);
 	}
@@ -365,4 +370,10 @@ public class PlanoDeCurso extends Model {
 	public CatalogoDisciplinas getCatalogo() {
 		return catalogoDeDisciplinas;
 	}
+	
+	public void addNasNaoAlocadas(Disciplina d){
+		disciplinasNaoAlocadas.add(d);
+	}
+	
+	
 }
