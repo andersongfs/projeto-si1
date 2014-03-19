@@ -20,15 +20,17 @@ public class Application extends Controller {
 
 	public static Result index() throws PrerequisitosInsuficientesException,
 			LimitesExcedidosException, JaContemDisciplinaException {
-		List<PlanoDeCurso> planos = planoDeCurso.find.all();
-
-		if (planos.isEmpty()) {
-			planoDeCurso = new PlanoDeCurso();
+		PlanoDeCurso plano = planoDeCurso.find.findUnique();
+		System.out.println(plano);
+		if (plano == null) {
+			CatalogoDisciplinas catalogo = new CatalogoDisciplinas();
+			catalogo.save();
+			planoDeCurso = new PlanoDeCurso(catalogo);
 			System.out.println("Plano Criado");
 			planoDeCurso.save();
 
 		} else {
-			planoDeCurso = planos.get(0); // pega o primeiro e unico plano
+			//planoDeCurso = planos.get(0); // pega o primeiro e unico plano
 			for (Disciplina d : planoDeCurso.getCadeirasDisponiveis()) {
 					planoDeCurso.adicionaCadeira(d.getPeriodo(), d.getNomeCadeira());
 					planoDeCurso.update();
