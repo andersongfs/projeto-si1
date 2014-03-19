@@ -67,12 +67,6 @@ public class PlanoDeCurso extends Model {
 			for (Disciplina d : catalogoDeDisciplinas.getCadeiras()) {
 				adicionaCadeira(d.getNomeCadeira());
 			}
-			// adicionaCadeira("Calculo I");
-			// adicionaCadeira(0, "PROG1");
-			// adicionaCadeira(0, "LPROG1");
-			// adicionaCadeira(0, "IC");
-			// adicionaCadeira(0, "LPT");
-			// adicionaCadeira(0, "VETORIAL");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -182,13 +176,14 @@ public class PlanoDeCurso extends Model {
 	 *             Caso o periodo esteja completamente cheio e não possa
 	 * @throws JaContemDisciplinaException
 	 */
-	public void adicionaCadeira(int periodo, String cadeira)
+	public void adicionaCadeira(int periodo, String nomeDisciplina)
 			throws PrerequisitosInsuficientesException,
 			LimitesExcedidosException, JaContemDisciplinaException {
-		Disciplina c = catalogoDeDisciplinas.getCadeira(cadeira);
-		System.out.println(c.getId());
-
-		for (Disciplina req : c.getRequisitos()) {
+		
+		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,catalogoDeDisciplinas.getId());
+		Disciplina disciplina = cat.getCadeira(nomeDisciplina);
+		
+		for (Disciplina req : disciplina.getRequisitos()) {
 			// varre os periodos anteriores vendo se os pre-requisitos estão
 			// adicionados.
 			boolean pagavel = false;
@@ -201,19 +196,23 @@ public class PlanoDeCurso extends Model {
 				throw new PrerequisitosInsuficientesException();
 			}
 		}
-		addCadeiraNoPeriodo(periodo, c);
+		addCadeiraNoPeriodo(periodo, disciplina);
+		disciplina.setAlocada(true);
+		Ebean.save(disciplina);
 	}
 
-	public void adicionaCadeira(String cadeira)
-			throws PrerequisitosInsuficientesException,
-			LimitesExcedidosException, JaContemDisciplinaException {
-		Disciplina c = catalogoDeDisciplinas.getCadeira(cadeira);
+	public void adicionaCadeira(String nomeDisciplina)throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException {
+		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,catalogoDeDisciplinas.getId());
+		Disciplina disciplina = cat.getCadeira(nomeDisciplina);
+		disciplina = Ebean.find(Disciplina.class, disciplina.getId());
+		
+		//Disciplina c = catalogoDeDisciplinas.getCadeira(disciplina);
 
-		for (Disciplina req : c.getRequisitos()) {
+		for (Disciplina req : disciplina.getRequisitos()) {
 			// varre os periodos anteriores vendo se os pre-requisitos estão
 			// adicionados.
 			boolean pagavel = false;
-			for (int p = 0; p < c.getPeriodo(); p++) {
+			for (int p = 0; p < disciplina.getPeriodo(); p++) {
 				if (contemDisciplina(p, req)) {
 					pagavel = true;
 				}
@@ -222,7 +221,7 @@ public class PlanoDeCurso extends Model {
 				throw new PrerequisitosInsuficientesException();
 			}
 		}
-		addCadeiraNoPeriodo(c.getPeriodo(), c);
+		addCadeiraNoPeriodo(disciplina.getPeriodo(), disciplina);
 	}
 
 	/**
