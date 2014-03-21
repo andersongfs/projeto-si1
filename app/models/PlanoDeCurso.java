@@ -245,7 +245,7 @@ public class PlanoDeCurso extends Model {
 		disciplinaARemover = Ebean.find(Disciplina.class, disciplinaARemover.getId());
 		periodos.get(periodo).removeDisciplina(disciplinaARemover);
 		disciplinaARemover.setAlocada(false);
-		Ebean.save(disciplinaARemover);
+		Ebean.update(disciplinaARemover);
 		
 		if (temDependentes(periodo, disciplina)) {
 			// A recursão nessa parte do código garante que todos os dependentes
@@ -331,16 +331,16 @@ public class PlanoDeCurso extends Model {
 		d = Ebean.find(Disciplina.class, d.getId());
 		if( ( periodos.get(novoPeriodo).creditosTotal() + d.getCreditos() ) <= periodos.get(novoPeriodo).LIMITE_CREDITOS){
 			periodos.get(periodoAtual).removeDisciplina(d);
-			
 			try{
-			d.setPeriodo(Ebean.find(Periodo.class, novoPeriodo).getId().intValue());
-			periodos.get(novoPeriodo).addCadeira(d);
-			Ebean.save(d); }
+				d.setPeriodo(Ebean.find(Periodo.class, novoPeriodo).getId().intValue());
+				periodos.get(novoPeriodo).addCadeira(d);
+				Ebean.save(d); }
 			
 			catch (LimitesExcedidosException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (JaContemDisciplinaException e) {
+			}
+			catch (JaContemDisciplinaException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
