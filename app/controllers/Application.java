@@ -89,6 +89,7 @@ public class Application extends Controller {
 		} else {
 			planoDeCurso.removeCadeira(periodo, nomeDisciplina);
 			planoDeCurso.update();
+			
 			return index();
 		}
 	}
@@ -103,6 +104,7 @@ public class Application extends Controller {
 
 		planoDeCurso.removeCadeira(periodo, nomeDisciplina);
 		planoDeCurso.update();
+		
 		return index();
 
 	}

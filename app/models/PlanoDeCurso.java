@@ -200,6 +200,7 @@ public class PlanoDeCurso extends Model {
 				throw new PrerequisitosInsuficientesException();
 			}
 		}
+		disciplina.setPeriodo(periodo);
 		addCadeiraNoPeriodo(periodo, disciplina);
 		disciplinasNaoAlocadas.remove(disciplina);
 		disciplina.setAlocada(true);
@@ -252,6 +253,7 @@ public class PlanoDeCurso extends Model {
 			removerDependentes(periodo, disciplina);
 		}
 		disciplinasNaoAlocadas.add(disciplinaARemover);
+		
 	}
 
 	/**
@@ -268,11 +270,15 @@ public class PlanoDeCurso extends Model {
 		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,
 				catalogoDeDisciplinas.getId());
 		Disciplina disciplinaARemover = cat.getCadeira(disciplina);
+		disciplinaARemover = Ebean.find(Disciplina.class, disciplinaARemover.getId());
+		disciplinaARemover.setAlocada(false);
 		for (int p = periodo + 1; p < getPeriodos().size(); p++) {
 			for (int d = getNumeroDeDisciplinas(p) - 1; d >= 0; d--) {
 				Disciplina cadTemp = getPeriodo(p).getDisciplinas().get(d);
 				if (cadTemp.ehPreRequisito(disciplinaARemover)) {
 					removeCadeira(p, cadTemp.getNomeCadeira());
+					
+					
 				}
 			}
 		}
@@ -319,16 +325,29 @@ public class PlanoDeCurso extends Model {
 	public void realocaCadeiras(int periodoAtual, int novoPeriodo,
 			String cadeira) throws LimitesExcedidosException,
 			JaContemDisciplinaException {
-		
 		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,
 				catalogoDeDisciplinas.getId());
 		Disciplina d = cat.getCadeira(cadeira);
 		d = Ebean.find(Disciplina.class, d.getId());
-		periodos.get(periodoAtual).removeDisciplina(d);
-		d.setPeriodo(Ebean.find(Periodo.class, novoPeriodo).getId().intValue());
-		periodos.get(novoPeriodo).addCadeira(d);
-		Ebean.save(d);
+		if( ( periodos.get(novoPeriodo).creditosTotal() + d.getCreditos() ) <= periodos.get(novoPeriodo).LIMITE_CREDITOS){
+			periodos.get(periodoAtual).removeDisciplina(d);
+			
+			try{
+			d.setPeriodo(Ebean.find(Periodo.class, novoPeriodo).getId().intValue());
+			periodos.get(novoPeriodo).addCadeira(d);
+			Ebean.save(d); }
+			
+			catch (LimitesExcedidosException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JaContemDisciplinaException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
+	
+	
 
 	public boolean temRequisitosDesalocados(int periodoAtual, String cadeira) {
 		Disciplina cadeiraASerVerificada = catalogoDeDisciplinas

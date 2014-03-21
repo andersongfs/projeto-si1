@@ -15,6 +15,7 @@ create table disciplina (
   creditos                  integer,
   dificuldade               integer,
   periodo                   integer,
+  alocada                   boolean,
   constraint uq_disciplina_nome_cadeira unique (nome_cadeira),
   constraint pk_disciplina primary key (id))
 ;
@@ -46,9 +47,15 @@ create table periodo_cadeira (
 ;
 
 create table plano_periodo (
-  fk_plano                       bigint not null,
-  fk_periodo                     bigint not null,
-  constraint pk_plano_periodo primary key (fk_plano, fk_periodo))
+  plano_de_curso_id              bigint not null,
+  periodo_id                     bigint not null,
+  constraint pk_plano_periodo primary key (plano_de_curso_id, periodo_id))
+;
+
+create table plano_de_curso_disciplina (
+  plano_de_curso_id              bigint not null,
+  disciplina_id                  bigint not null,
+  constraint pk_plano_de_curso_disciplina primary key (plano_de_curso_id, disciplina_id))
 ;
 create sequence catalogo_disciplinas_seq;
 
@@ -73,9 +80,13 @@ alter table periodo_cadeira add constraint fk_periodo_cadeira_periodo_01 foreign
 
 alter table periodo_cadeira add constraint fk_periodo_cadeira_disciplina_02 foreign key (fk_cadeira) references disciplina (id) on delete restrict on update restrict;
 
-alter table plano_periodo add constraint fk_plano_periodo_plano_de_cur_01 foreign key (fk_plano) references plano_de_curso (id) on delete restrict on update restrict;
+alter table plano_periodo add constraint fk_plano_periodo_plano_de_cur_01 foreign key (plano_de_curso_id) references plano_de_curso (id) on delete restrict on update restrict;
 
-alter table plano_periodo add constraint fk_plano_periodo_periodo_02 foreign key (fk_periodo) references periodo (id) on delete restrict on update restrict;
+alter table plano_periodo add constraint fk_plano_periodo_periodo_02 foreign key (periodo_id) references periodo (id) on delete restrict on update restrict;
+
+alter table plano_de_curso_disciplina add constraint fk_plano_de_curso_disciplina__01 foreign key (plano_de_curso_id) references plano_de_curso (id) on delete restrict on update restrict;
+
+alter table plano_de_curso_disciplina add constraint fk_plano_de_curso_disciplina__02 foreign key (disciplina_id) references disciplina (id) on delete restrict on update restrict;
 
 # --- !Downs
 
@@ -94,6 +105,8 @@ drop table if exists periodo_cadeira;
 drop table if exists plano_de_curso;
 
 drop table if exists plano_periodo;
+
+drop table if exists plano_de_curso_disciplina;
 
 SET REFERENTIAL_INTEGRITY TRUE;
 

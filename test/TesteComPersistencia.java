@@ -68,7 +68,22 @@ public class TesteComPersistencia {
 		
 		
 		
+		//Realocar
+		PlanoDeCurso p3 = PlanoDeCurso.find.findUnique();
+		p3.realocaCadeiras(1,4, p3.getCadeira("Programacao II").getNomeCadeira());
+		// Verifica se a disciplina esta contida no periodo que foi realocada
+		Assert.assertTrue(p3.getPeriodo(4).getDisciplinas().contains(p3.getCadeira("Programacao II")));
+		//Verifica se a disciplina não foi duplica e realmente nao esta mais no antigo periodo
+		Assert.assertFalse(p3.getPeriodo(1).getDisciplinas().contains(p3.getCadeira("Programacao II")));
+		//Voltar a cadeira pra o perido original
+		p3.realocaCadeiras(4,1, p3.getCadeira("Programacao II").getNomeCadeira());
+		Assert.assertTrue(p3.getPeriodo(1).getDisciplinas().contains(p3.getCadeira("Programacao II")));
+		Assert.assertFalse(p3.getPeriodo(4).getDisciplinas().contains(p3.getCadeira("Programacao II")));
 		
+		//Realocar para um perido com o total de creditos lotados
+		p3.realocaCadeiras(1,2, p3.getCadeira("Programacao II").getNomeCadeira());
+		//Ela deve fica no mesmo periodo
+		Assert.assertTrue(p3.getPeriodo(1).getDisciplinas().contains(p3.getCadeira("Programacao II")));
 		
 	}
 	
