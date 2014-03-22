@@ -3,10 +3,19 @@
 # ~~~~
 
 # Home page
+
+GET     /                     			controllers.Autenticacao.login()
+GET 	/cadastro						controllers.Autenticacao.cadastro()
+
+POST	/novoUsuario					controllers.Autenticacao.cadastrarNovoUsuario()
+POST	/autenticarUsuario				controllers.Autenticacao.autenticarUsuario()
+POST 	/logout							controllers.Autenticacao.logout()
+
+
 GET     /                         		controllers.Application.index()
 POST 	/addCadeira						controllers.Application.addCadeira()
 POST 	/removerCadeira					controllers.Application.removerCadeira()
-POST	/removerCadeiraComPosRequisito		controllers.Application.removerCadeiraComPosRequisito()
+POST	/removerCadeiraComPosRequisito	controllers.Application.removerCadeiraComPosRequisito()
 POST	/realocarCadeira				controllers.Application.realocarCadeira()
 
 # Map static resources from the /public folder to the /assets URL path

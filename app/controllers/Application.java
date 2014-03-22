@@ -1,5 +1,7 @@
 package controllers;
 
+
+
 import java.util.List;
 
 import models.CatalogoDisciplinas;
@@ -8,6 +10,7 @@ import models.JaContemDisciplinaException;
 import models.PlanoDeCurso;
 import models.LimitesExcedidosException;
 import models.PrerequisitosInsuficientesException;
+import models.Usuario;
 import play.data.DynamicForm;
 import play.mvc.*;
 import views.html.*;
@@ -17,16 +20,19 @@ public class Application extends Controller {
 
 	public static PlanoDeCurso planoDeCurso;
 	public static String errorMessage = "";
-
-	public static Result index() throws PrerequisitosInsuficientesException,
-			LimitesExcedidosException, JaContemDisciplinaException {
+	
+	public static Usuario usuario;
+	
+	public static Result index() throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException  {
+		
 		PlanoDeCurso plano = planoDeCurso.find.findUnique();
 		if (plano == null) {
 			CatalogoDisciplinas catalogo = new CatalogoDisciplinas();
 			catalogo.save();
 			plano = new PlanoDeCurso(catalogo);
 			planoDeCurso = plano;
-			planoDeCurso.save();			
+			planoDeCurso.save();
+			
 
 		} else {
 			planoDeCurso = plano;
@@ -39,7 +45,7 @@ public class Application extends Controller {
 					planoDeCurso.addNasNaoAlocadas(d);	
 				}
 			}
-			
+			return redirect(routes.Autenticacao.login());
 		}		
 		
 		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));

@@ -12,7 +12,9 @@ import models.LimitesExcedidosException;
 import models.Periodo;
 import models.PlanoDeCurso;
 import models.PrerequisitosInsuficientesException;
+import models.Usuario;
 
+import org.apache.bcel.verifier.exc.VerificationException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -127,6 +129,24 @@ public class TesteComPersistencia {
 		// Ela deve fica no mesmo periodo
 		Assert.assertTrue(plano3.getPeriodo(1).getDisciplinas()
 				.contains(plano3.getCadeira("Programacao II")));
+		
+		
+		
+	
 	}
+	
+	@Test 
+	public void testaUsuario(){
+		CatalogoDisciplinas d = CatalogoDisciplinas.find.findUnique();
+		PlanoDeCurso plano3 = new PlanoDeCurso(d);
+		plano3.save();
+		Usuario usuario = new Usuario("tiago@gmail.com", "tiago", "tiago1991", plano3);
+		
+		Assert.assertTrue(usuario.getPlano() == plano3);
+		
+		
+	}
+	
+	
 
 }

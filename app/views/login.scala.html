@@ -1,0 +1,61 @@
+@import helper._
+<head>
+<meta charset="UTF-8">
+</head>
+@main("Login") {
+
+<div class="hero-unit" align="center">
+	<h1>Monta Grade</h1>
+	<p>Entre com seu login e senha ou cadraste-se!</p>
+</div>
+
+<div class="form-actions">
+
+	@if(flash.containsKey("erro")){
+	<div class="alert alert-error container">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<h4>Atenção!</h4>
+		@flash.get("erro")
+	</div>
+	} 
+
+	@if(flash.containsKey("success")){
+	<div class="alert alert-success container">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		@flash.get("success")
+	</div>
+	} <br> <br>
+
+	<form class="autenticacao" method="POST" id="autenticarUsuario"
+		action="@routes.Autenticacao.autenticarUsuario()">
+
+		<div class="control-group" align="center">
+			<label class="control-label" for="email">E-mail</label>
+			<div class="controls">
+				<input type="text" id="email" name="email" placeholder="E-mail">
+			</div>
+		</div>
+
+		<div class="control-group" align="center">
+			<label class="control-label" for="senha">Senha</label>
+			<div class="controls">
+				<input type="password" id="senha" name="senha" placeholder="Senha">
+			</div>
+		</div>
+
+		<br>
+
+		<div class="control-group" align="center">
+			<div class="enter">
+				<button type="submit" class="btn">Entrar</button>
+			</div>
+			<br>
+			<div class="register">
+				<button type="button" class="btn"
+					onclick="location.href = '@routes.Autenticacao.cadastro()';">Cadastrar</button>
+			</div>
+		</div>
+
+	</form>
+</div>
+}
