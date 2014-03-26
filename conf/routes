@@ -15,7 +15,6 @@ POST	/autenticarUsuario				controllers.Autenticacao.autenticarUsuario()
 
 POST 	/addCadeira						controllers.Application.addCadeira()
 POST 	/removerCadeira					controllers.Application.removerCadeira()
-POST	/removerCadeiraComPosRequisito	controllers.Application.removerCadeiraComPosRequisito()
 POST	/realocarCadeira				controllers.Application.realocarCadeira()
 
 # Map static resources from the /public folder to the /assets URL path

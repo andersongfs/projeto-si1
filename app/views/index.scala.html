@@ -15,7 +15,6 @@
 			 var formDelete = document.getElementById('delete');
 			 campoNome.value = nome;
 			 campoPeriodo.value = periodo;
-			 formDelete.action = "@routes.Application.removerCadeiraComPosRequisito()";
 			 formDelete.submit();
 			 
 		}
@@ -57,7 +56,7 @@
 			
 			
 			@for(disciplina <- periodo.getDisciplinas()){
-				@if(planoDeCurso.temRequisitosDesalocados(periodos.indexOf(periodo),disciplina.getNomeCadeira())){
+				@if(planoDeCurso.temRequisitosDesalocados(disciplina.getNomeCadeira())){
 					<div class="disciplina" style="position:relative; background: #FF7373;">
 				}else{
 					<div class="disciplina" style="position:relative;">
@@ -65,23 +64,24 @@
 					<descricao>@disciplina.getCreditos() Créditos</descricao><br>
 					<p style="font-size:small;">Dificuldade: @disciplina.getDificuldade</p>					
 					<form  name="delete" id="delete" method="post" action="@routes.Application.removerCadeira()">
+						<input type="hidden" name="idDisciplina" id="idDisciplina" value="@disciplina.getId()"/>
 						<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
 						<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>				
 						
-					@if(periodos.indexOf(periodo)!= 0){
+				
 						<button type="submit" class="btn btn-danger btn-xs" style="position:absolute; bottom: 3%; left: 34%;" >
 							<span style="font-size:xx-small;">Remover</span>
 						</button>
-					}
+					
 					</form>
 					
 					<form id="realocarCadeira" method="post" action="@routes.Application.realocarCadeira()">
 						<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
+						<input type="hidden" name="idDisciplina" id="idDisciplina" value="@disciplina.getId()"/>
 						<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>	
-					@if(periodos.indexOf(periodo)!= 0){
 					
 					<label><small>Período:&nbsp;</small></label><select name="realoca_selecionado">
-						
+						<option value="1">1</option>
 						<option value="2">2</option>
 						<option value="3">3</option>
 						<option value="4">4</option>
@@ -95,7 +95,7 @@
 						<span style="font-size:xx-small;">Realocar</span>
 					</button>
 					
-					}
+					
 					</form>
 					
 				</div>
@@ -120,7 +120,7 @@
 				<descricao>@disciplina.getCreditos() creditos<br>Dificuldade @disciplina.getDificuldade()</descricao>
 				<br>
 				<label><small>Período:&nbsp;</small></label><select name="periodo">
-						
+						<option value="1">1</option>
 						<option value="2">2</option>
 						<option value="3">3</option>
 						<option value="4">4</option>
@@ -130,6 +130,7 @@
 						<option value="8">8</option>
 				</select>
 					<input name="nomeCadeira" type="hidden" value="@disciplina.getNomeCadeira()">
+					<input name="idDisciplina" type="hidden" value="@disciplina.getId()">
 					<button type="submit" class="btn btn-success btn-xs">
 						 Adicionar
 					</button>

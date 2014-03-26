@@ -27,8 +27,6 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	/**
 	 * 
 	 */
-	
-
 	private static final long SerialVersionUID = 1L;
 	
 	@Id
@@ -59,7 +57,7 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	// information expert
 	private int dificuldade;
 	private int periodo; 
-	private boolean alocada; 
+	//private boolean alocada; 
 	/**
 	 * Construtor de Disciplina
 	 * @param cadeira
@@ -71,6 +69,10 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 		setCreditos(creditos);
 		setDificuldade(1 + new Random().nextInt(5)); // dificuldade de 0 a 5
 	}
+	
+	public Disciplina(String cadeira){
+		setNomeCadeira(cadeira);
+	}
 
 	public Disciplina(String cadeira, int creditos, int dificuldade, int periodo) {
 		setNomeCadeira(cadeira);
@@ -78,7 +80,6 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 		setCreditos(creditos);
 		setDificuldade(dificuldade); // dificuldade usada no sistema é de 0 a 5
 		setPeriodo(periodo);
-		alocada = true;
 	}
 	
 	/**
@@ -182,15 +183,6 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	public static void create(Disciplina disciplina) {
 		disciplina.save();
 	}
-
-	public static void delete(Long id) {
-		find.ref(id).delete();
-	}
-
-	public static void atualizar(Long id) {
-		Disciplina disciplina = find.ref(id);
-		disciplina.update();
-	}
 	
 	public int compareTo(Disciplina disciplina) {
 		return getNomeCadeira().compareTo(disciplina.getNomeCadeira());
@@ -209,34 +201,7 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 		this.periodo = periodo;
 	}
 	
-	public Comparable<Long> getId(){
+	public Long getId(){
 		return id;
 	}
-	
-	public boolean isAlocada(){
-		return alocada;
-	}
-	
-	public void setAlocada(boolean alocacao){
-		this.alocada = alocacao;
-	}
-
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Disciplina other = (Disciplina) obj;
-//		return Objects.equal(this.getCreditos(), other.getCreditos())
-//				&& Objects.equal(this.getNomeCadeira(), other.getNomeCadeira());
-//	}
-
-//	@Override
-//	public String toString() {
-//		return "Cadeira [id=" + id + ", nome=" + nome + ", periodo=" + periodo
-//				+ "]";
-//	}
 }

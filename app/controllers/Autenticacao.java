@@ -2,7 +2,7 @@ package controllers;
 
 import models.CadastroDeUsuario;
 import models.CamposEmBrancoException;
-import models.CatalogoDisciplinas;
+
 import models.JaContemDisciplinaException;
 import models.LimitesExcedidosException;
 import models.PlanoDeCurso;
@@ -18,7 +18,7 @@ import play.data.DynamicForm;
 public class Autenticacao extends Controller {
 
 	private static CadastroDeUsuario novoCadastro;
-	private static CatalogoDisciplinas catalogo ;
+	
 	
 	//Login e logout de usuario
 	
@@ -36,13 +36,15 @@ public class Autenticacao extends Controller {
 		final DynamicForm form = formDisciplina.bindFromRequest();
 		final String email = form.get("email");
 		final String senha = form.get("senha");
-
-		Usuario usuario = Usuario.authenticate(email, senha);
-
-		if (usuario != null) {
-			
-			Application.usuario = usuario;
-			return Application.index(usuario);
+		System.out.println(" EMAIL " + email);
+		System.out.println(" SENHA " + senha);
+		Usuario usuarioTemp = Usuario.authenticate(email, senha);
+		System.out.println(usuarioTemp.getNome());
+		System.out.println("To aqui antes do if");
+		if (usuarioTemp != null) {
+			System.out.println("Entrei aqui");
+			Application.usuario = usuarioTemp;
+			return Application.index(usuarioTemp);
 		}
 
 		flash("Verifique se seus estão corretamente!");
@@ -84,21 +86,14 @@ public class Autenticacao extends Controller {
 	}
 
 	private static void criarNovoUsuario(String email, String nome, String senha) {
-		PlanoDeCurso planoDeCurso = null;
-		PlanoDeCurso plano = planoDeCurso.find.findUnique();
-		catalogo = CatalogoDisciplinas.find.findUnique();
-		if(catalogo == null){
-			System.out.println("entrei aqui");
-			catalogo = new CatalogoDisciplinas();
-			catalogo.save();
-		}
-		
-		plano = new PlanoDeCurso(catalogo);
-		planoDeCurso = plano;
-		planoDeCurso.save();			
-		
+		PlanoDeCurso plano = new PlanoDeCurso();
+		plano.save();			
+	
 		Usuario usuario = new Usuario(email, nome, senha, plano);
 		usuario.save();
+		System.out.println(usuario.getNome());
+		System.out.println(usuario.getEmail());
+		System.out.println(usuario.getPlano());
 		Application.usuario = usuario;
 	
 		

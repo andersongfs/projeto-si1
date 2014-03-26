@@ -32,25 +32,23 @@ public class PlanoDeCurso extends Model {
 	final int NUMERO_PERIODOS = 8;
 
 	// CREATOR: PlanoDeCurso faz uso direto do CatalogoDeDisciplina
-	@ManyToOne
-	private CatalogoDisciplinas catalogoDeDisciplinas;
+//	@ManyToOne
+//	private CatalogoDisciplinas catalogoDeDisciplinas;
 	
 	/*
 	 * INFORMATION EXPERT: PlanoDeCurso usa as disciplinas não alocadas para
 	 * decidir quem pode ser alocada, então ela precisa conhecer as disciplinas.
 	 */
 	@ManyToMany
+	@JoinTable(name = "disciplinas_disponiveis")
 	private List<Disciplina> disciplinasNaoAlocadas;
 
 	public PlanoDeCurso() {
-	}
-
-	public PlanoDeCurso(CatalogoDisciplinas catalogo) {
-		catalogoDeDisciplinas = catalogo;
+		//catalogoDeDisciplinas = catalogo;
 		periodos = new ArrayList<Periodo>();
 		disciplinasNaoAlocadas = new ArrayList<Disciplina>();
 		inicializarPeriodos();
-		popularDisciplinasNaoAlocadas();
+	//	popularDisciplinasNaoAlocadas();
 	}
 
 	/**
@@ -62,26 +60,205 @@ public class PlanoDeCurso extends Model {
 			periodos.add(new Periodo());
 		}
 		try {
-			// Preenche o primeiro periodo com as cadeiras obrigatórias
+			addCadeira("Calculo I", 4, 5, 0);
+			addCadeira("Vetorial", 4, 4, 0);
+			addCadeira("LPT", 4, 2, 0);
+			addCadeira("Programacao I", 4, 3, 0);
+			addCadeira("Lab Programacao I", 4, 3, 0);
+			addCadeira("Introducao a Computacao", 4, 3, 0);
 
-			for (Disciplina d : catalogoDeDisciplinas.getCadeiras()) {
-				if(d.isAlocada()){
-					adicionaCadeira(d.getNomeCadeira());
-				}
-			}
+			// cadeiras 2 periodo
+			addCadeira("Programacao II", 4, 4, 1);
+			addCadeira("Lab Programacao II", 4, 4, 1);
+			addCadeira("Teoria dos Grafos", 2, 3, 1);
+			addCadeira("Calculo II", 4, 5, 1);
+			addCadeira("Matematica Discreta", 4, 4, 1);
+			addCadeira("Metodologia Cientifica", 4, 3, 1);
+			addCadeira("Fund Fisica Classica", 4, 4, 1);
+
+			// cadeiras 3 periodo
+			addCadeira("Estrutura de Dados", 4, 5, 2);
+			addCadeira("Lab Estrutura de Dados", 4, 5, 2);
+			addCadeira("Algebra Linear", 4, 5, 2);
+			addCadeira("Probabilidade e Estat.", 4, 5, 2);
+			addCadeira("Teoria da Computacao", 4, 3, 2);
+			addCadeira("Fund Fisica Moderna", 4, 5, 2);
+			addCadeira("Gerencia da Informacao", 4, 4, 2);
+
+			// cadeiras 4 periodo
+			addCadeira("Org Arquitetura de Computadores", 4, 4, 3);
+			addCadeira("Lab Org Arquitetura de Computadores", 4, 4, 3);
+			addCadeira("Paradigmas de Ling de Prog", 2, 4, 3);
+			addCadeira("Metodos Estatisticos", 4, 5, 3);
+			addCadeira("Logica Matematica", 4, 5, 3);
+			addCadeira("Sistemas da Informacao I", 4, 4, 3);
+			addCadeira("Eng de Software I", 4, 4, 3);
+
+			// cadeiras 5 periodo
+			addCadeira("Analise Tec de Algoritmos", 4, 4, 4);
+			addCadeira("Redes de Computadores", 4, 4, 4);
+			addCadeira("Compiladores", 4, 5, 4);
+			addCadeira("Banco de Dados I", 4, 4, 4);
+			addCadeira("Sistemas da Informacao II", 4, 4, 4);
+			addCadeira("Lab Eng de Software", 2, 4, 4);
+			addCadeira("Informatica e Sociedade", 2, 2, 4);
+
+			// cadeiras 6 periodo
+			addCadeira("Sistemas Operacionais", 4, 4, 5);
+			addCadeira("Interconexao de Redes de Comp.", 2, 4, 5);
+			addCadeira("Lab Interconexao de Redes de Comp.", 2, 4, 5);
+			addCadeira("Inteligencia Artificial", 4, 4, 5);
+			addCadeira("Banco de Dados II", 4, 4, 5);
+			addCadeira("Optativa 1", 4, 3, 5);
+			addCadeira("Optatiiva 2", 4, 3, 5);
+			addCadeira("Direito e Cidadania", 4, 2, 5);
+
+			// cadeiras 7 periodo
+			addCadeira("Metodos e Software Num", 4, 4, 6);
+			addCadeira("Av. de Desempenho de Sist. Discretos", 4, 5, 6);
+			addCadeira("Optativa 3", 4, 3, 6);
+			addCadeira("Optativa 4", 4, 3, 6);
+			addCadeira("Optativa 5", 4, 3, 6);
+			addCadeira("Projeto I", 4, 5, 6);
+			addCadeira("Optativa 6", 4, 3, 6);
+
+			// cadeiras 8 periodo
+			addCadeira("Projeto II", 6, 5, 7);
+			addCadeira("Optativa 7", 4, 3, 7);
+			addCadeira("Optativa 8", 4, 3, 7);
+			addCadeira("Optativa 9", 4, 3, 7);
+			addCadeira("Optativa 10", 4, 3, 7);
+			addCadeira("Optativa 11", 4, 3, 7);
+	//
+//			// adicionar requisitos
+	//
+			// 2 periodo
+			getCadeira("Calculo II").addRequisitos(getCadeira("Calculo I"));
+			getCadeira("Programacao II").addRequisitos(getCadeira("Programacao I"));
+			getCadeira("Programacao II").addRequisitos(
+					getCadeira("Lab Programacao I"));
+			getCadeira("Programacao II").addRequisitos(
+					getCadeira("Introducao a Computacao"));
+			getCadeira("Lab Programacao II").addListaRequisitos(
+					getCadeira("Programacao II").getRequisitos());
+			getCadeira("Teoria dos Grafos").addRequisitos(
+					getCadeira("Programacao I"));
+			getCadeira("Teoria dos Grafos").addRequisitos(
+					getCadeira("Lab Programacao I"));
+			getCadeira("Fund Fisica Moderna")
+					.addRequisitos(getCadeira("Calculo I"));
+			getCadeira("Fund Fisica Moderna").addRequisitos(getCadeira("Vetorial"));
+
+			// 3 periodo
+			getCadeira("Estrutura de Dados").addRequisitos(
+					getCadeira("Programacao II"));
+			getCadeira("Estrutura de Dados").addRequisitos(
+					getCadeira("Lab Programacao II"));
+			getCadeira("Estrutura de Dados").addRequisitos(
+					getCadeira("Teoria dos Grafos"));
+			getCadeira("Lab Estrutura de Dados").addListaRequisitos(
+					getCadeira("Estrutura de Dados").getRequisitos());
+			getCadeira("Algebra Linear").addRequisitos(getCadeira("Vetorial"));
+			getCadeira("Probabilidade e Estat.").addRequisitos(
+					getCadeira("Calculo II"));
+			getCadeira("Teoria da Computacao").addRequisitos(
+					getCadeira("Teoria dos Grafos"));
+			getCadeira("Teoria da Computacao").addRequisitos(
+					getCadeira("Matematica Discreta"));
+			getCadeira("Teoria da Computacao").addRequisitos(
+					getCadeira("Introducao a Computacao"));
+			getCadeira("Fund Fisica Moderna").addRequisitos(
+					getCadeira("Fund Fisica Classica"));
+			getCadeira("Fund Fisica Moderna").addRequisitos(
+					getCadeira("Calculo II"));
+
+			// 4 periodo
+			getCadeira("Org Arquitetura de Computadores").addRequisitos(
+					getCadeira("Estrutura de Dados"));
+			getCadeira("Org Arquitetura de Computadores").addRequisitos(
+					getCadeira("Lab Estrutura de Dados"));
+			getCadeira("Org Arquitetura de Computadores").addRequisitos(
+					getCadeira("Fund Fisica Moderna"));
+			getCadeira("Lab Org Arquitetura de Computadores").addListaRequisitos(
+					getCadeira("Org Arquitetura de Computadores").getRequisitos());
+			getCadeira("Paradigmas de Ling de Prog").addRequisitos(
+					getCadeira("Estrutura de Dados"));
+			getCadeira("Paradigmas de Ling de Prog").addRequisitos(
+					getCadeira("Lab Estrutura de Dados"));
+			getCadeira("Paradigmas de Ling de Prog").addRequisitos(
+					getCadeira("Teoria da Computacao"));
+			getCadeira("Metodos Estatisticos").addRequisitos(
+					getCadeira("Probabilidade e Estat."));
+			getCadeira("Metodos Estatisticos").addRequisitos(
+					getCadeira("Algebra Linear"));
+			getCadeira("Logica Matematica").addRequisitos(
+					getCadeira("Teoria da Computacao"));
+			getCadeira("Sistemas da Informacao I").addRequisitos(getCadeira("Gerencia da Informacao"));
+			getCadeira("Eng de Software I").addRequisitos(
+					getCadeira("Probabilidade e Estat."));
+			getCadeira("Eng de Software I").addRequisitos(
+					getCadeira("Programacao II"));
+			getCadeira("Eng de Software I").addRequisitos(
+					getCadeira("Lab Programacao II"));
+
+//			// 5 periodo
+			getCadeira("Analise Tec de Algoritmos").addRequisitos(
+					getCadeira("Estrutura de Dados"));
+			getCadeira("Analise Tec de Algoritmos").addRequisitos(
+					getCadeira("Lab Estrutura de Dados"));
+			getCadeira("Analise Tec de Algoritmos").addRequisitos(
+					getCadeira("Calculo II"));
+			getCadeira("Analise Tec de Algoritmos").addRequisitos(
+					getCadeira("Logica Matematica"));
+			getCadeira("Redes de Computadores").addRequisitos(
+					getCadeira("Org Arquitetura de Computadores"));
+			getCadeira("Redes de Computadores").addRequisitos(
+					getCadeira("Lab Org Arquitetura de Computadores"));
+			getCadeira("Compiladores").addListaRequisitos(
+					getCadeira("Redes de Computadores").getRequisitos());
+			getCadeira("Compiladores").addRequisitos(
+					getCadeira("Paradigmas de Ling de Prog"));
+			getCadeira("Banco de Dados I").addRequisitos(
+					getCadeira("Sistemas da Informacao I"));
+			getCadeira("Sistemas da Informacao II").addRequisitos(
+					getCadeira("Sistemas da Informacao I"));
+			getCadeira("Lab Eng de Software").addRequisitos(
+					getCadeira("Eng de Software I"));
+
+			// 6 periodo
+			getCadeira("Sistemas Operacionais").addListaRequisitos(
+					getCadeira("Redes de Computadores").getRequisitos());
+			getCadeira("Interconexao de Redes de Comp.").addRequisitos(
+					getCadeira("Redes de Computadores"));
+			getCadeira("Lab Interconexao de Redes de Comp.").addRequisitos(
+					getCadeira("Redes de Computadores"));
+			getCadeira("Inteligencia Artificial").addRequisitos(
+					getCadeira("Metodos Estatisticos"));
+			getCadeira("Inteligencia Artificial").addRequisitos(
+					getCadeira("Paradigmas de Ling de Prog"));
+			getCadeira("Inteligencia Artificial").addRequisitos(
+					getCadeira("Analise Tec de Algoritmos"));
+			getCadeira("Banco de Dados II").addRequisitos(
+					getCadeira("Banco de Dados I"));
+			getCadeira("Banco de Dados II").addRequisitos(
+					getCadeira("Sistemas da Informacao II"));
+
+//			// 7 periodo
+			getCadeira("Metodos e Software Num").addRequisitos(
+					getCadeira("Analise Tec de Algoritmos"));
+			getCadeira("Metodos e Software Num").addRequisitos(
+					getCadeira("Algebra Linear"));
+			getCadeira("Av. de Desempenho de Sist. Discretos").addRequisitos(
+					getCadeira("Probabilidade e Estat."));
+			getCadeira("Projeto I")
+					.addRequisitos(getCadeira("Lab Eng de Software"));
+			getCadeira("Projeto I").addRequisitos(
+					getCadeira("Metodologia Cientifica"));
+
+//			// 8 periodo
+			getCadeira("Projeto II").addRequisitos(getCadeira("Projeto I"));
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Adiciona as disciplinas para a lista de não alocadas
-	 */
-	private void popularDisciplinasNaoAlocadas() {
-		for (Disciplina d : catalogoDeDisciplinas.getCadeiras()) {
-			if(!d.isAlocada()){
-				disciplinasNaoAlocadas.add(d);
-			}
 		}
 	}
 
@@ -103,7 +280,12 @@ public class PlanoDeCurso extends Model {
 	public List<Periodo> getPeriodos() {
 		return periodos;
 	}
-
+	
+	
+	private void addCadeira(String nome, int creditos, int dificuldade, int periodo) throws LimitesExcedidosException, JaContemDisciplinaException {
+		Disciplina d = new Disciplina(nome,creditos,dificuldade,periodo); 
+		addCadeiraNoPeriodo(periodo, d);
+	}
 	/**
 	 * Adiciona uma cadeira num determinado periodo.
 	 * 
@@ -114,9 +296,12 @@ public class PlanoDeCurso extends Model {
 	 * @throws LimitesExcedidosException
 	 * @throws JaContemDisciplinaException
 	 */
-	private void addCadeiraNoPeriodo(int p, Disciplina d)
+	public void addCadeiraNoPeriodo(int p, Disciplina d)
 			throws LimitesExcedidosException, JaContemDisciplinaException {
 		getPeriodo(p).addCadeira(d);
+		if (disciplinasNaoAlocadas.contains(d)) {
+			disciplinasNaoAlocadas.remove(d);
+		}
 	}
 
 	/**
@@ -158,78 +343,8 @@ public class PlanoDeCurso extends Model {
 	 * @return uma Lista com as Disciplinas disponíveis para o plano de curso.
 	 */
 	public List<Disciplina> getCadeirasDisponiveis() {
-//		for (Periodo p : getPeriodos()) {
-//			for (Disciplina d : p.getDisciplinas()) {
-//				disciplinasNaoAlocadas.remove(d);
-//			}
-//		}
 		return disciplinasNaoAlocadas;
 	}
-
-	/**
-	 * Adiciona uma cadeira a um determinado periodo.
-	 * 
-	 * @param periodo
-	 *            Inteiro indicando a qual periodo a cadeira será adicionada
-	 * @param cadeira
-	 *            String contendo a identificação única da cadeira;
-	 * @throws PrerequisitosInsuficientesException
-	 *             Caso os prerequisitos da cadeira não estejam alocados no
-	 *             plano de cuso
-	 * @throws LimitesExcedidosException
-	 *             Caso o periodo esteja completamente cheio e não possa
-	 * @throws JaContemDisciplinaException
-	 */
-	public void adicionaCadeira(int periodo, String nomeDisciplina)
-			throws PrerequisitosInsuficientesException,
-			LimitesExcedidosException, JaContemDisciplinaException {
-		
-		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,catalogoDeDisciplinas.getId());
-		Disciplina disciplina = cat.getCadeira(nomeDisciplina);
-		
-		for (Disciplina req : disciplina.getRequisitos()) {
-			// varre os periodos anteriores vendo se os pre-requisitos estão
-			// adicionados.
-			boolean pagavel = false;
-			for (int p = 0; p < periodo; p++) {
-				if (contemDisciplina(p, req)) {
-					pagavel = true;
-				}
-			}
-			if (!pagavel) {
-				throw new PrerequisitosInsuficientesException();
-			}
-		}
-		disciplina.setPeriodo(periodo);
-		addCadeiraNoPeriodo(periodo, disciplina);
-		disciplinasNaoAlocadas.remove(disciplina);
-		disciplina.setAlocada(true);
-		Ebean.save(disciplina);
-	}
-
-	public void adicionaCadeira(String nomeDisciplina)throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException {
-		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,catalogoDeDisciplinas.getId());
-		Disciplina disciplina = cat.getCadeira(nomeDisciplina);
-		disciplina = Ebean.find(Disciplina.class, disciplina.getId());
-		
-		//Disciplina c = catalogoDeDisciplinas.getCadeira(disciplina);
-
-		for (Disciplina req : disciplina.getRequisitos()) {
-			// varre os periodos anteriores vendo se os pre-requisitos estão
-			// adicionados.
-			boolean pagavel = false;
-			for (int p = 0; p < disciplina.getPeriodo(); p++) {
-				if (contemDisciplina(p, req)) {
-					pagavel = true;
-				}
-			}
-			if (!pagavel) {
-				throw new PrerequisitosInsuficientesException();
-			}
-		}
-		addCadeiraNoPeriodo(disciplina.getPeriodo(), disciplina);
-	}
-
 	/**
 	 * Remove uma cadeira de um determinado periodo.
 	 * 
@@ -238,47 +353,20 @@ public class PlanoDeCurso extends Model {
 	 * @param disciplina
 	 *            String contendo a identificação da Disciplina a ser removida
 	 */
-	public void removeCadeira(int periodo, String disciplina) {
-		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,
-				catalogoDeDisciplinas.getId());
-		Disciplina disciplinaARemover = cat.getCadeira(disciplina);
-		disciplinaARemover = Ebean.find(Disciplina.class, disciplinaARemover.getId());
-		periodos.get(periodo).removeDisciplina(disciplinaARemover);
-		disciplinaARemover.setAlocada(false);
-		Ebean.update(disciplinaARemover);
-		
-		if (temDependentes(periodo, disciplina)) {
-			// A recursão nessa parte do código garante que todos os dependentes
-			// serão removidos do plano de curso
-			removerDependentes(periodo, disciplina);
+	public void removeCadeira(int periodo, Long idDisciplina) {
+		Disciplina disciplina = Disciplina.find.byId(idDisciplina);
+		if (periodo >= 0 && periodo<8) {
+			getPeriodo(periodo).removeDisciplina(disciplina);
+			disciplinasNaoAlocadas.add(disciplina);
 		}
-		disciplinasNaoAlocadas.add(disciplinaARemover);
-		
-	}
 
-	/**
-	 * Remove as disciplinas que são dependentes de uma determinada disciplina.
-	 * 
-	 * @param periodo
-	 *            Inteiro identificando o periodo da displina 'pivot'.
-	 * @param disciplina
-	 *            String identificando a disciplina 'pivot'
-	 */
-	private void removerDependentes(int periodo, String disciplina) {
-		// para cada cadeira que tem o prerequisito
-		// retirado da grade também sai da grade;
-		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,
-				catalogoDeDisciplinas.getId());
-		Disciplina disciplinaARemover = cat.getCadeira(disciplina);
-		disciplinaARemover = Ebean.find(Disciplina.class, disciplinaARemover.getId());
-		disciplinaARemover.setAlocada(false);
-		for (int p = periodo + 1; p < getPeriodos().size(); p++) {
-			for (int d = getNumeroDeDisciplinas(p) - 1; d >= 0; d--) {
-				Disciplina cadTemp = getPeriodo(p).getDisciplinas().get(d);
-				if (cadTemp.ehPreRequisito(disciplinaARemover)) {
-					removeCadeira(p, cadTemp.getNomeCadeira());
-					
-					
+		for (int i = 0; i < NUMERO_PERIODOS; i++) {
+			for (int j = 0; j < periodos.get(i).getDisciplinas().size(); j++) {
+				Disciplina disciplinaAuxiliar = periodos.get(i).getDisciplinas().get(j);
+				if (disciplinaAuxiliar.getRequisitos().contains(disciplina)) {
+					periodos.get(i).getDisciplinas().remove(disciplinaAuxiliar);
+					j--;
+					removeCadeira(i, disciplinaAuxiliar.getId());
 				}
 			}
 		}
@@ -294,9 +382,8 @@ public class PlanoDeCurso extends Model {
 	 * @return boolean informando se existe alguma cadeira no plano de curso que
 	 *         dependa da cadeira passada como argumento
 	 */
-	public boolean temDependentes(int periodo, String disciplina) {
-		Disciplina disciplinaAnalisada = catalogoDeDisciplinas
-				.getCadeira(disciplina);
+	public boolean temDependentes(int periodo, Long idDisciplina) {
+		Disciplina disciplinaAnalisada = Disciplina.find.byId(idDisciplina);
 		for (int indicePeriodo = periodo + 1; indicePeriodo < getPeriodos()
 				.size(); indicePeriodo++) {
 			for (int d = getNumeroDeDisciplinas(indicePeriodo) - 1; d >= 0; d--) {
@@ -323,18 +410,14 @@ public class PlanoDeCurso extends Model {
 	 * @throws LimitesExcedidosException
 	 */
 	public void realocaCadeiras(int periodoAtual, int novoPeriodo,
-			String cadeira) throws LimitesExcedidosException,
+			Disciplina disciplina) throws LimitesExcedidosException,
 			JaContemDisciplinaException {
-		CatalogoDisciplinas cat = Ebean.find(CatalogoDisciplinas.class,
-				catalogoDeDisciplinas.getId());
-		Disciplina d = cat.getCadeira(cadeira);
-		d = Ebean.find(Disciplina.class, d.getId());
-		if( ( periodos.get(novoPeriodo).creditosTotal() + d.getCreditos() ) <= periodos.get(novoPeriodo).LIMITE_CREDITOS){
-			periodos.get(periodoAtual).removeDisciplina(d);
+		if( ( periodos.get(novoPeriodo).creditosTotal() + disciplina.getCreditos() ) <= periodos.get(novoPeriodo).LIMITE_CREDITOS){
+			periodos.get(periodoAtual).removeDisciplina(disciplina);
 			try{
-				d.setPeriodo(Ebean.find(Periodo.class, novoPeriodo).getId().intValue());
-				periodos.get(novoPeriodo).addCadeira(d);
-				Ebean.save(d); }
+				//disciplina.setPeriodo(Ebean.find(Periodo.class, novoPeriodo).getId().intValue());
+				periodos.get(novoPeriodo).addCadeira(disciplina);
+				}
 			
 			catch (LimitesExcedidosException e) {
 				// TODO Auto-generated catch block
@@ -346,15 +429,12 @@ public class PlanoDeCurso extends Model {
 			}
 		}
 	}
-	
-	
 
-	public boolean temRequisitosDesalocados(int periodoAtual, String cadeira) {
-		Disciplina cadeiraASerVerificada = catalogoDeDisciplinas
-				.getCadeira(cadeira);
-		for (int i = periodoAtual; i < periodos.size(); i++) {
+	public boolean temRequisitosDesalocados(String nomeDisciplina) {
+		Disciplina disciplina = getCadeira(nomeDisciplina);
+		for (int i = 0; i < periodos.size(); i++) {
 			for (Disciplina cadeiraTemp : periodos.get(i).getDisciplinas()) {
-				if (cadeiraASerVerificada.ehPreRequisito(cadeiraTemp)) {
+				if (disciplina.ehPreRequisito(cadeiraTemp)) {
 					return true;
 				}
 			}
@@ -368,26 +448,16 @@ public class PlanoDeCurso extends Model {
 
 	public static Finder<Long, PlanoDeCurso> find = new Finder<Long, PlanoDeCurso>(
 			Long.class, PlanoDeCurso.class);
-
-	public static void create(PlanoDeCurso p) {
-		p.save();
-	}
-
-	public static void delete(Long id) {
-		find.ref(id).delete();
-	}
-
-	public static void atualizar(Long id) {
-		PlanoDeCurso p = find.ref(id);
-		p.update();
-	}
-
-	public Disciplina getCadeira(String nome) {
-		return catalogoDeDisciplinas.getCadeira(nome);
-	}
-
-	public CatalogoDisciplinas getCatalogo() {
-		return catalogoDeDisciplinas;
+	
+	public Disciplina getCadeira(String nomeDisciplina){
+		for (Periodo p : periodos) {
+			for (Disciplina d : p.getDisciplinas()) {
+				if (d.getNomeCadeira().equals(nomeDisciplina)) {
+					return d;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public void addNasNaoAlocadas(Disciplina d){
