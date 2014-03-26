@@ -49,12 +49,6 @@ public class Autenticacao extends Controller {
 		return badRequest(login.render());
 	}
 	
-	
-	/*public static Result logout() {
-		Application.usuario = null;
-		return redirect(routes.Application.index());
-	}*/
-	
 	//Cadastro e cadastro de novos usuarios.
 	
 	
