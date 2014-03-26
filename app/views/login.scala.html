@@ -2,19 +2,31 @@
 
 <html style="height: 100%;">
     <head>
+    <link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
         <title>Login</title>
-    <div id="login">
-    <form id="login" method="POST" action="@routes.Autenticacao.autenticarUsuario()">
-          <p><input type="text" id="email" name="email" placeholder="emial"></p>
-          <p><input type="password" id="senha" name="senha" placeholder="senha"><p>
-     <button type="submit" class="btn btn-success btn-xs">
-       Login
-     </button>
-     <button type="button" class="btn"
-					onclick="location.href = '@routes.Autenticacao.cadastro()';">Cadastrar</button>
-    </form>
-    
+
+	<div class="jumbotron">
+	
+	<div class="container">
+	
+	<form id="login" method="POST" action="@routes.Autenticacao.autenticarUsuario()">
+		<div class="form-group">
+			<label for="inputEmail">Email</label> <input type="email"
+				class="form-control" id="email" placeholder="Email">
+		</div>
+		<div class="form-group">
+			<label for="inputPassword">Password</label> <input type="password"
+				class="form-control" id="senha" placeholder="Password">
+		</div>
+		<div class="checkbox">
+			<label><input type="checkbox"> Remember me</label>
+		</div>
+		<button type="submit" class="btn btn-primary">Login</button>
+		<button type="button" class="btn btn-primary"  onclick="location.href = '@routes.Autenticacao.cadastro()';">Cadastrar</button>
+	</form>
+	</div>
     </div>
+
     </head>
     <body class="body-back" style="height: 100%;">
 
