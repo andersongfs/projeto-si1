@@ -23,9 +23,9 @@ public class Application extends Controller {
 	
 	public static Usuario usuario;
 	
-	public static Result index() throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException  {
+	public static Result index(Usuario usuario) throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException  {
 		
-		PlanoDeCurso plano = planoDeCurso.find.findUnique();
+		PlanoDeCurso plano = usuario.getPlano();
 		if (plano == null) {
 			CatalogoDisciplinas catalogo = new CatalogoDisciplinas();
 			catalogo.save();
@@ -45,7 +45,7 @@ public class Application extends Controller {
 					planoDeCurso.addNasNaoAlocadas(d);	
 				}
 			}
-			return redirect(routes.Autenticacao.login());
+			
 		}		
 		
 		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
@@ -59,7 +59,7 @@ public class Application extends Controller {
 			final int periodo = Integer.parseInt(form.get("periodo")) - 1;
 
 			planoDeCurso.adicionaCadeira(periodo, nome);
-			return index();
+			return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 		} catch (LimitesExcedidosException e) {
 			return badRequest(index.render(planoDeCurso,
 					planoDeCurso.getPeriodos(),
@@ -96,7 +96,7 @@ public class Application extends Controller {
 			planoDeCurso.removeCadeira(periodo, nomeDisciplina);
 			planoDeCurso.update();
 			
-			return index();
+			return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 		}
 	}
 
@@ -111,7 +111,7 @@ public class Application extends Controller {
 		planoDeCurso.removeCadeira(periodo, nomeDisciplina);
 		planoDeCurso.update();
 		
-		return index();
+		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 
 	}
 

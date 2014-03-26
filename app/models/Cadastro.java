@@ -72,7 +72,7 @@ public class Cadastro {
 	}
 	
 	public boolean cadastroValido() throws CamposEmBrancoException, SenhaErradaException,
-			UsuarioCadastradoException {
+			CadastroDeUsuarioException {
 
 		if (CamposEmBranco()) {
 			throw new CamposEmBrancoException();
@@ -83,7 +83,7 @@ public class Cadastro {
 		}
 
 		if (verificaCadastroDeUsuario()) {
-			throw new UsuarioCadastradoException();
+			throw new CadastroDeUsuarioException();
 		}
 		return true;
 	}

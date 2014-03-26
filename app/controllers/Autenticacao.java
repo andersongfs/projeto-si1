@@ -3,10 +3,13 @@ package controllers;
 import models.Cadastro;
 import models.CamposEmBrancoException;
 import models.CatalogoDisciplinas;
+import models.JaContemDisciplinaException;
+import models.LimitesExcedidosException;
 import models.PlanoDeCurso;
+import models.PrerequisitosInsuficientesException;
 import models.SenhaErradaException;
 import models.Usuario;
-import models.UsuarioCadastradoException;
+import models.CadastroDeUsuarioException;
 import play.mvc.*;
 import views.html.*;
 import play.data.DynamicForm;
@@ -15,7 +18,7 @@ import play.data.DynamicForm;
 public class Autenticacao extends Controller {
 
 	private static Cadastro novoCadastro;
-	
+	private static CatalogoDisciplinas catalogo ;
 	
 	//Login e logout de usuario
 	
@@ -28,7 +31,7 @@ public class Autenticacao extends Controller {
 		return ok(login.render());
 	}
 	
-	public static Result autenticarUsuario() {
+	public static Result autenticarUsuario() throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException {
 		DynamicForm formDisciplina = new DynamicForm();
 		final DynamicForm form = formDisciplina.bindFromRequest();
 		final String email = form.get("email");
@@ -37,8 +40,9 @@ public class Autenticacao extends Controller {
 		Usuario usuarioTemporario = Usuario.authenticate(email, senha);
 
 		if (usuarioTemporario != null) {
+			
 			Application.usuario = usuarioTemporario;
-			return redirect(routes.Application.index());
+			return Application.index(usuarioTemporario);
 		}
 
 		flash("Verifique se seus dados estão inseridos corretamente!");
@@ -46,33 +50,31 @@ public class Autenticacao extends Controller {
 	}
 	
 	
-	public static Result logout() {
+	/*public static Result logout() {
 		Application.usuario = null;
 		return redirect(routes.Application.index());
-	}
+	}*/
 	
 	//Cadastro e cadastro de novos usuarios.
 	
 	
 	
-	public static Result cadastrarNovoUsuario() {
+	public static Result cadastrarNovoUsuario() throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException {
 		DynamicForm formDisciplina = new DynamicForm();
 		final DynamicForm form = formDisciplina.bindFromRequest();
 		final String nome = form.get("nome");
 		final String email = form.get("email");
 		final String senha = form.get("senha");
-		final String confSenha = form.get("confirmacao_senha");
+		final String confirmaSenha = form.get("confirmacao_senha");
 
-		novoCadastro = new Cadastro(nome, email, senha, confSenha);
-		System.out.println(novoCadastro.getEmail());
-		System.out.println(novoCadastro.getNome());
-		System.out.println(novoCadastro.getConfirmaSenha());
-		System.out.println(novoCadastro.getSenha());
+		novoCadastro = new Cadastro(nome, email, senha, confirmaSenha);
+	
 
 		try {
 			if (novoCadastro.cadastroValido()) {
 				criarNovoUsuario(email, nome, senha);
-				return redirect(routes.Application.index());
+			
+				return login();
 			}
 		} catch (CamposEmBrancoException e) {
 			flash("erro", "Campos em branco");
@@ -80,7 +82,7 @@ public class Autenticacao extends Controller {
 		} catch (SenhaErradaException e) {
 			flash("erro", "Senha errada");
 			return badRequest(cadastro.render());
-		} catch (UsuarioCadastradoException e) {
+		} catch (CadastroDeUsuarioException e) {
 			flash("erro", "usuário já cadastrado nesse e-mail");
 			return badRequest(cadastro.render());
 		}
@@ -90,8 +92,13 @@ public class Autenticacao extends Controller {
 	private static void criarNovoUsuario(String email, String nome, String senha) {
 		PlanoDeCurso planoDeCurso = null;
 		PlanoDeCurso plano = planoDeCurso.find.findUnique();
-		CatalogoDisciplinas catalogo = new CatalogoDisciplinas();
-		catalogo.save();
+		catalogo = CatalogoDisciplinas.find.findUnique();
+		if(catalogo == null){
+			System.out.println("entrei aqui");
+			catalogo = new CatalogoDisciplinas();
+			catalogo.save();
+		}
+		
 		plano = new PlanoDeCurso(catalogo);
 		planoDeCurso = plano;
 		planoDeCurso.save();			
