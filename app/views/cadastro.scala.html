@@ -2,27 +2,74 @@
 <meta charset="utf-8">
 
 <html style="height: 100%;">
-    <head>
-        <title>Login</title>
-    <div id="cadastro">
-    <form id="cadastro" method="POST" action="@routes.Autenticacao.cadastrarNovoUsuario()">
-     <p><h1>Nome</h1>
-     <p><input type="text" id="nome" name="nome" placeholder="nome"></p>
-     <p><h1>E-mail</h1>
-     <p><input type="text" id="email" name="email" placeholder="email"></p>
-     <p><h1>Senha</h1>
-     <p><input type="password" id="senha" name="senha" placeholder="senha"><p>
-     <p><h1>Confirmação de Senha</h1>
-     <p><input type="password" id="confirm_senha" name="confirm_senha" placeholder="senha"><p>
-          
-          
-     <button type="submit" class="btn btn-success btn-xs">
-       Cadastrar
-     </button>
-    </form>
-    </div>
-    </head>
-    <body class="body-back" style="height: 100%;">
+<head>
+<link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+<title>Cadastro</title>
+<div id="cadastro">
 
- </body>
+	<form class="form-horizontal" id="cadastro" method="POST"
+		action="@routes.Autenticacao.cadastrarNovoUsuario()">
+		<fieldset>
+
+			<!-- Cadastre-se Aqui! -->
+			<legend>Cadastre-se Aqui</legend>
+
+			<!-- Text input-->
+			<div class="control-group">
+				<label class="control-label" for="textinput">Digite o seu nome:</label>
+				<div class="controls">
+					<input id="nome" name="nome" type="text"
+						placeholder="nome" class="input-xlarge">
+					
+				</div>
+			</div>
+
+			<!-- Text input-->
+			<div class="control-group">
+				<label class="control-label" for="textinput">Digite o seu email:</label>
+				<div class="controls">
+					<input id="email" name="email" type="text"
+						placeholder="email" class="input-xlarge">
+					
+				</div>
+			</div>
+
+			<!-- Password input-->
+			<div class="control-group">
+				<label class="control-label" for="passwordinput">Senha:
+					Input</label>
+				<div class="controls">
+					<input id="senha" name="senha" type="password"
+						placeholder="senha" class="input-xlarge">
+					<p class="help-block">help</p>
+				</div>
+			</div>
+
+			<!-- Password input-->
+			<div class="control-group">
+				<label class="control-label" for="passwordinput">Confirme sua Senha:
+					Input</label>
+				<div class="controls">
+					<input id="confirm_senha" name="confirm_senha" type="password"
+						placeholder="confirm_senha" class="input-xlarge">
+					
+				</div>
+			</div>
+
+			<!-- Button (Double) -->
+			<div class="control-group">
+				<label class="control-label" for="button1id"></label>
+				<div class="controls">
+					<button type="submit" id="button1id" name="button1id" class="btn btn-success">
+						Cadastrar</button>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+</head>
+<body class="body-back" style="height: 100%;">
+
+</body>
 </html>
