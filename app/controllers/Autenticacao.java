@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Cadastro;
+import models.CadastroDeUsuario;
 import models.CamposEmBrancoException;
 import models.CatalogoDisciplinas;
 import models.JaContemDisciplinaException;
@@ -17,7 +17,7 @@ import play.data.DynamicForm;
 
 public class Autenticacao extends Controller {
 
-	private static Cadastro novoCadastro;
+	private static CadastroDeUsuario novoCadastro;
 	private static CatalogoDisciplinas catalogo ;
 	
 	//Login e logout de usuario
@@ -37,15 +37,15 @@ public class Autenticacao extends Controller {
 		final String email = form.get("email");
 		final String senha = form.get("senha");
 
-		Usuario usuarioTemporario = Usuario.authenticate(email, senha);
+		Usuario usuario = Usuario.authenticate(email, senha);
 
-		if (usuarioTemporario != null) {
+		if (usuario != null) {
 			
-			Application.usuario = usuarioTemporario;
-			return Application.index(usuarioTemporario);
+			Application.usuario = usuario;
+			return Application.index(usuario);
 		}
 
-		flash("Verifique se seus dados estão inseridos corretamente!");
+		flash("Verifique se seus estão corretamente!");
 		return badRequest(login.render());
 	}
 	
@@ -65,9 +65,9 @@ public class Autenticacao extends Controller {
 		final String nome = form.get("nome");
 		final String email = form.get("email");
 		final String senha = form.get("senha");
-		final String confirmaSenha = form.get("confirmacao_senha");
+		final String confirmaSenha = form.get("confirm_senha");
 
-		novoCadastro = new Cadastro(nome, email, senha, confirmaSenha);
+		novoCadastro = new CadastroDeUsuario(nome, email, senha, confirmaSenha);
 	
 
 		try {
@@ -77,13 +77,13 @@ public class Autenticacao extends Controller {
 				return login();
 			}
 		} catch (CamposEmBrancoException e) {
-			flash("erro", "Campos em branco");
+			
 			return badRequest(cadastro.render());
 		} catch (SenhaErradaException e) {
-			flash("erro", "Senha errada");
+			
 			return badRequest(cadastro.render());
 		} catch (CadastroDeUsuarioException e) {
-			flash("erro", "usuário já cadastrado nesse e-mail");
+			
 			return badRequest(cadastro.render());
 		}
 		return badRequest(cadastro.render());

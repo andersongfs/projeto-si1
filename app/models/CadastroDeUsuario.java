@@ -5,8 +5,8 @@ import java.util.List;
 import com.avaje.ebean.Ebean;
 
 // Cadastro, responsável por cadastrar os usuários
- 
-public class Cadastro {
+
+public class CadastroDeUsuario {
 
 	private static String nome;
 	private static String email;
@@ -14,11 +14,16 @@ public class Cadastro {
 	private static String confirmaSenha;
 
 	// Contrutor de Cadastro.
-	public Cadastro(String nome,String email, String senha, String confirmaSenha) {
-		setNome(nome);
-		setEmail(email);
-		setSenha(senha);
-		setConfirmaSenha(confirmaSenha);
+	public CadastroDeUsuario(String nome, String email, String senha,
+			String confirmaSenha) {
+		// setNome(nome);
+		this.nome = nome;
+		// setEmail(email);
+		this.email = email;
+		// setSenha(senha);
+		this.senha = senha;
+		// setConfirmaSenha(confirmaSenha);
+		this.confirmaSenha = confirmaSenha;
 	}
 
 	public static String getNome() {
@@ -26,7 +31,7 @@ public class Cadastro {
 	}
 
 	public static void setNome(String nome) {
-		Cadastro.nome = nome;
+		CadastroDeUsuario.nome = nome;
 	}
 
 	public static String getEmail() {
@@ -34,7 +39,7 @@ public class Cadastro {
 	}
 
 	public static void setEmail(String email) {
-		Cadastro.email = email;
+		CadastroDeUsuario.email = email;
 	}
 
 	public static String getSenha() {
@@ -42,7 +47,7 @@ public class Cadastro {
 	}
 
 	public static void setSenha(String senha) {
-		Cadastro.senha = senha;
+		CadastroDeUsuario.senha = senha;
 	}
 
 	public static String getConfirmaSenha() {
@@ -50,10 +55,9 @@ public class Cadastro {
 	}
 
 	public static void setConfirmaSenha(String confSenha) {
-		Cadastro.confirmaSenha = confSenha;
+		CadastroDeUsuario.confirmaSenha = confSenha;
 	}
-	
-	
+
 	public static boolean verificaCadastroDeUsuario() {
 		List<Usuario> usuarios = Ebean.find(Usuario.class).findList();
 		for (Usuario u : usuarios) {
@@ -63,18 +67,20 @@ public class Cadastro {
 		}
 		return false;
 	}
-	
-	private static boolean CamposEmBranco() {
-		if (getNome().isEmpty() || getEmail().isEmpty() || getSenha().isEmpty() || getConfirmaSenha().isEmpty()) {
+
+	private static boolean ChecaCamposEmBranco() {
+		
+		if (getNome().isEmpty() || getEmail().isEmpty() || getSenha().isEmpty()
+				|| getConfirmaSenha().isEmpty()) {
 			return true;
 		}
 		return false;
 	}
-	
-	public boolean cadastroValido() throws CamposEmBrancoException, SenhaErradaException,
-			CadastroDeUsuarioException {
 
-		if (CamposEmBranco()) {
+	public boolean cadastroValido() throws CamposEmBrancoException,
+			SenhaErradaException, CadastroDeUsuarioException {
+
+		if (ChecaCamposEmBranco()) {
 			throw new CamposEmBrancoException();
 		}
 
