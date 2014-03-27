@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta charset="UTF-8">
 <style type="text/css">
 
 body {
@@ -15,6 +16,22 @@ body {
     <link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
         <title>Login</title>
     <div class="background"></div>
+    @if(flash.containsKey("Exception")){
+	<div class="alert alert-warning alert-dismissable text-center">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<h4>Atenção!</h4>
+		@flash.get("Exception")
+		
+	</div>
+	}
+	@if(flash.containsKey("Cadastro_Sucesso")){
+	<div class="alert alert-warning alert-dismissable text-center">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		
+		@flash.get("Cadastro_Sucesso")
+	</div>
+	} 
+
 		<div class="jumbotron" style = "width: 450px; float: right; margin-top: 10%; margin-right: 5%; border-radius: 10px;">
 		
 		<div class="container" style = "width: 390px;">

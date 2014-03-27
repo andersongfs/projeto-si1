@@ -15,6 +15,24 @@ body {
 <head>
 <link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
 <title>Cadastro</title>
+<div class="background"></div>
+    @if(flash.containsKey("Exception")){
+	<div class="alert alert-warning alert-dismissable text-center">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<h4>Atenção!</h4>
+		@flash.get("Exception")
+	</div>
+	} 
+
+<div class="background"></div>
+    @if(flash.containsKey("Exception")){
+	<div class="alert alert-warning alert-dismissable text-center">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<h4>Atenção!</h4>
+		@flash.get("Exception")
+	</div>
+	} 
+
 
 
 <div class="jumbotron" style = "width: 550px; float: right; margin-top: 3%; margin-right: 3%; border-radius: 10px;">
@@ -43,7 +61,7 @@ body {
 					<div class="control-group">
 						<label class="control-label" for="textinput">Digite o seu email:</label>
 						<div class="controls">
-							<input id="email" name="email" type="text"
+							<input id="email" name="email" type="email"
 								placeholder="Email" class="form-control">
 							
 						</div>

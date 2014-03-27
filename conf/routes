@@ -9,7 +9,7 @@ GET 	/cadastro						controllers.Autenticacao.cadastro()
 
 POST	/novoUsuario					controllers.Autenticacao.cadastrarNovoUsuario()
 POST	/autenticarUsuario				controllers.Autenticacao.autenticarUsuario()
-
+GET    /sair                           controllers.Autenticacao.logout()
 
 
 

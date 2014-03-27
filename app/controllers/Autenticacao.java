@@ -2,7 +2,6 @@ package controllers;
 
 import models.CadastroDeUsuario;
 import models.CamposEmBrancoException;
-
 import models.JaContemDisciplinaException;
 import models.LimitesExcedidosException;
 import models.PlanoDeCurso;
@@ -31,6 +30,11 @@ public class Autenticacao extends Controller {
 		return ok(login.render());
 	}
 	
+	public static Result logout(){
+		return ok(login.render());
+		
+	}
+	
 	public static Result autenticarUsuario() throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException {
 		DynamicForm formDisciplina = new DynamicForm();
 		final DynamicForm form = formDisciplina.bindFromRequest();
@@ -42,7 +46,7 @@ public class Autenticacao extends Controller {
 			return Application.index(usuarioTemp);
 		}
 
-		flash("Verifique se seus estão corretamente!");
+		flash("Exception", "Verifique se seus estão corretos!");
 		return badRequest(login.render());
 	}
 	
@@ -64,17 +68,17 @@ public class Autenticacao extends Controller {
 		try {
 			if (novoCadastro.cadastroValido()) {
 				criarNovoUsuario(email, nome, senha);
-			
+				flash("Cadastro_Sucesso", "Cadastro realizado com sucesso!");
 				return login();
 			}
 		} catch (CamposEmBrancoException e) {
-			
+			flash("Exception", "Campos em branco. Preencha todos os campos.");
 			return badRequest(cadastro.render());
 		} catch (SenhaErradaException e) {
-			
+			flash("Exception", "As senhas não correspondem.");
 			return badRequest(cadastro.render());
 		} catch (CadastroDeUsuarioException e) {
-			
+			flash("Exception", "Email já cadastrado no sistema Minha Grade."); 
 			return badRequest(cadastro.render());
 		}
 		return badRequest(cadastro.render());
