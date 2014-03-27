@@ -1,34 +1,39 @@
 <!DOCTYPE html>
+<style type="text/css">
 
+body {
+	background-image: url("assets/images/background.png");
+	background-size: 50%;
+	background-repeat: no-repeat;
+	background-position: 80px 180px;
+}
+
+</style>
+<body>
 <html style="height: 100%;">
     <head>
     <link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
         <title>Login</title>
-
-	<div class="jumbotron">
-	
-	<div class="container">
-	
-	<form id="login" method="POST" action="@routes.Autenticacao.autenticarUsuario()">
-		<div class="form-group">
-			<label for="inputEmail">Email</label> <input type="email"
-				class="form-control" name="email" id="email" placeholder="Email">
+    <div class="background"></div>
+		<div class="jumbotron" style = "width: 450px; float: right; margin-top: 10%; margin-right: 5%; border-radius: 10px;">
+		
+		<div class="container" style = "width: 390px;">
+		
+			<form id="login" method="POST" action="@routes.Autenticacao.autenticarUsuario()">
+				<div class="form-group">
+					<label for="inputEmail">Email</label> <input type="email"
+						class="form-control" name="email" id="email" placeholder="Email">
+				</div>
+				<div class="form-group">
+					<label for="inputPassword">Password</label> <input type="password"
+						class="form-control" name="senha" id="senha" placeholder="Password">
+				</div>
+				<button type="submit" class="btn btn-primary">Login</button>
+				<button type="button" class="btn btn-primary"  onclick="location.href = '@routes.Autenticacao.cadastro()';">Cadastrar</button>
+			</form>
 		</div>
-		<div class="form-group">
-			<label for="inputPassword">Password</label> <input type="password"
-				class="form-control" name="senha" id="senha" placeholder="Password">
-		</div>
-		<div class="checkbox">
-			<label><input type="checkbox"> Remember me</label>
-		</div>
-		<button type="submit" class="btn btn-primary">Login</button>
-		<button type="button" class="btn btn-primary"  onclick="location.href = '@routes.Autenticacao.cadastro()';">Cadastrar</button>
-	</form>
-	</div>
     </div>
 
     </head>
-    <body class="body-back" style="height: 100%;">
-
- </body>
 </html>
+</body>
