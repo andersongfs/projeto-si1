@@ -36,13 +36,8 @@ public class Autenticacao extends Controller {
 		final DynamicForm form = formDisciplina.bindFromRequest();
 		final String email = form.get("email");
 		final String senha = form.get("senha");
-		System.out.println(" EMAIL " + email);
-		System.out.println(" SENHA " + senha);
 		Usuario usuarioTemp = Usuario.authenticate(email, senha);
-		System.out.println(usuarioTemp.getNome());
-		System.out.println("To aqui antes do if");
 		if (usuarioTemp != null) {
-			System.out.println("Entrei aqui");
 			Application.usuario = usuarioTemp;
 			return Application.index(usuarioTemp);
 		}

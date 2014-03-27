@@ -57,7 +57,7 @@
 			
 			@for(disciplina <- periodo.getDisciplinas()){
 				@if(planoDeCurso.temRequisitosDesalocados(disciplina.getNomeCadeira())){
-					<div class="disciplina" style="position:relative; background: #FF7373;">
+					<div class="disciplina" style="position:relative;">
 				}else{
 					<div class="disciplina" style="position:relative;">
 				}	<nome>@disciplina.getNomeCadeira()</nome><br>
