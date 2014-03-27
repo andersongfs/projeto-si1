@@ -87,13 +87,8 @@ public class Autenticacao extends Controller {
 
 	private static void criarNovoUsuario(String email, String nome, String senha) {
 		PlanoDeCurso plano = new PlanoDeCurso();
-		plano.save();			
-	
 		Usuario usuario = new Usuario(email, nome, senha, plano);
 		usuario.save();
-		System.out.println(usuario.getNome());
-		System.out.println(usuario.getEmail());
-		System.out.println(usuario.getPlano());
 		Application.usuario = usuario;
 	
 		

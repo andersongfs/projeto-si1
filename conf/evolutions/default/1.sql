@@ -9,7 +9,6 @@ create table disciplina (
   creditos                  integer,
   dificuldade               integer,
   periodo                   integer,
-  constraint uq_disciplina_nome_cadeira unique (nome_cadeira),
   constraint pk_disciplina primary key (id))
 ;
 

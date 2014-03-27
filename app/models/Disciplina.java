@@ -38,7 +38,7 @@ public class Disciplina extends Model implements Comparable<Disciplina>{
 	*/
 	
 	@Constraints.Required
-	@Column(unique=true, nullable=false)
+	@Column(nullable=false)
 	private String nomeCadeira;
 	
 	/*INFORMATION EXPERT: Disciplina precisa saber seus créditos, pois é uma
