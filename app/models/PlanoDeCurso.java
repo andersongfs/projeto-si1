@@ -430,11 +430,11 @@ public class PlanoDeCurso extends Model {
 		}
 	}
 
-	public boolean temRequisitosDesalocados(String nomeDisciplina) {
-		Disciplina disciplina = getCadeira(nomeDisciplina);
-		for (int i = 0; i < periodos.size(); i++) {
-			for (Disciplina cadeiraTemp : periodos.get(i).getDisciplinas()) {
-				if (disciplina.ehPreRequisito(cadeiraTemp)) {
+	public boolean temRequisitosDesalocados(Long idDisciplina) {
+		Disciplina disciplina = Disciplina.find.byId(idDisciplina);
+		for (int i = disciplina.getPeriodo(); i < periodos.size(); i++) {
+			for (Disciplina disciplinaTemp : periodos.get(i).getDisciplinas()) {
+				if (disciplina.ehPreRequisito(disciplinaTemp)) {
 					return true;
 				}
 			}
