@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.validation.constraints.AssertTrue;
 
-import models.CatalogoDisciplinas;
 import models.JaContemDisciplinaException;
 import models.LimitesExcedidosException;
 import models.Periodo;
@@ -26,23 +25,15 @@ public class TesteComPersistencia {
 	@Before
 	public void setUp() {
 		start(fakeApplication(inMemoryDatabase()));
-		CatalogoDisciplinas catalogo = new CatalogoDisciplinas();
-		catalogo.save();
 	}
 
 	@Test
 	public void criaPlano() throws Exception {
-		CatalogoDisciplinas c = CatalogoDisciplinas.find.findUnique();
-		Assert.assertNotNull(c);
-
-		PlanoDeCurso plano = new PlanoDeCurso(c);
+		PlanoDeCurso plano = new PlanoDeCurso();
 		plano.save();
-		Assert.assertNotNull(plano.getCatalogo());
-
+		Usuario user = new Usuario("n@email.com", "nathan", "senha", plano);
 		PlanoDeCurso p = PlanoDeCurso.find.findUnique();
-		Assert.assertNotNull(p.getCatalogo());
 		Assert.assertNotNull(p.getCadeira("Programacao II").getId());
-
 		PlanoDeCurso plano1 = PlanoDeCurso.find.findUnique();
 		Assert.assertNotNull(plano1.getCadeira("Programacao II").getId());
 		// assertEquals(plano, Ebean.find(beanType))
