@@ -14,9 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import play.db.ebean.Model;
-import scalaz.Each;
-
-import com.avaje.ebean.Ebean;
 
 @Entity
 public class PlanoDeCurso extends Model {
