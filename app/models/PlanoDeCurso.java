@@ -30,10 +30,6 @@ public class PlanoDeCurso extends Model {
 	final int NUMERO_PERIODOS = 8;
 	private final int PRIMEIRO_PERIODO = 0;
 	private int periodoAtual;
-
-	// CREATOR: PlanoDeCurso faz uso direto do CatalogoDeDisciplina
-//	@ManyToOne
-//	private CatalogoDisciplinas catalogoDeDisciplinas;
 	
 	/*
 	 * INFORMATION EXPERT: PlanoDeCurso usa as disciplinas não alocadas para
