@@ -103,7 +103,6 @@ public class Global extends GlobalSettings{
 				addRequisitos("Teoria dos Grafos", "Lab Programacao I");
 				addRequisitos("Fund Fisica Classica", "Calculo I");
 				addRequisitos("Fund Fisica Classica", "Vetorial");
-
 				// 3 periodo
 				addRequisitos("Estrutura de Dados", "Programacao II");
 				addRequisitos("Estrutura de Dados", "Lab Programacao II");
@@ -116,7 +115,6 @@ public class Global extends GlobalSettings{
 				addRequisitos("Teoria da Computacao", "Introducao a Computacao");
 				addRequisitos("Fund Fisica Moderna", "Fund Fisica Classica");
 				addRequisitos("Fund Fisica Moderna", "Calculo II");
-
 				// 4 periodo
 				addRequisitos("Org Arquitetura de Computadores", "Estrutura de Dados");
 				addRequisitos("Org Arquitetura de Computadores", "Lab Estrutura de Dados");
