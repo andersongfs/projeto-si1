@@ -9,13 +9,13 @@ descricao {
 }
 
 nome-principal {
-	color: #FFFFFF;
+	color: #000099;
 	font-size: 25px;
 	font-weight: bold;
 }
 
 .body-back {
-	background-color: #153e63;
+	background-color: #FFFFFF;
 }
 
 .wrapper {
@@ -45,6 +45,7 @@ nome-principal {
 	width: 1280px; 
 	display: inherit;
 	border-radius: 10px;
+	font-size: 12px;
 }
 
 .coluna {
@@ -64,6 +65,7 @@ nome-principal {
 	margin-top: 10px;
 	width: 1280px;
 	display: inherit;
+	font-size: 12px;
 }
 
 .disciplina {
@@ -72,16 +74,58 @@ nome-principal {
 	margin-top:6px;
 	width: 138px;
 	border-radius: 10px;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 2px;
 	text-align: center;
+	position: relative;
 }
 
+.disciplina nome{
+	color: #153e63;
+	font-size: 12px;
+	font-weight: bold;
+	display:block;
+}
+
+.disciplina info{
+	color: #000000;
+	font-size: 12px;
+	display: block;
+}
+
+.disciplina span1{
+	font-size: 12px;
+	margin-left: 10px;
+}
+
+.disciplina select{
+	float:right;
+	margin-right: 20px;
+}
 .disciplina:hover {
 	background-color: #b2cfe9;
+}
+
+.titulo-periodo span{
+	margin-top:40px;
 }
 
 .float-left {
 	float: left;
 	margin-left: 10px;	
+}
+
+.realocacao{
+	padding-bottom: 0px;
+}
+
+.btn-left{
+	margin-left:8px;
+	margin-bottom: auto;
+}
+.btn-right{
+	margin-right: 8px;
+}
+
+.botoes{
+	padding-bottom: 20px;
 }

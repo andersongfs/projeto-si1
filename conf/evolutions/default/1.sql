@@ -21,6 +21,8 @@ create table periodo (
 create table plano_de_curso (
   id                        bigint not null,
   numero_periodos           integer,
+  primeiro_periodo          integer,
+  periodo_atual             integer,
   constraint pk_plano_de_curso primary key (id))
 ;
 
@@ -29,7 +31,6 @@ create table Usuario (
   nome                      varchar(255),
   email                     varchar(255),
   senha                     varchar(255),
-  periodo_atual             integer,
   plano_id                  bigint,
   constraint pk_Usuario primary key (id))
 ;
