@@ -19,7 +19,6 @@
 			 
 		}
 	}
-	
 </script>
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav"
 	role="banner">
@@ -46,61 +45,62 @@
 }
 
 
-	<div id="colunas" style=" width: 135%;">
+	<div id="colunas">
 		@for(periodo <- periodos){
 			<div id="c@{periodos.indexOf(periodo)+1}" class="coluna" style="text-align:center; width:160px; height:800px ">
-			<span style="margin-top:40px; color:blue;"><b>@{periodos.indexOf(periodo)+1}º Período </b></span>
-			<br>
-			<p style="text-align: center;">
-				@periodo.creditosTotal() Créditos<br>
-				Dificuldade @periodo.getDificuldadePeriodo()
-			</span>
-			<hr style="border: 1px dotted grey;">
+				<div class="titulo-periodo">
+					<span><b>@{periodos.indexOf(periodo)+1}º Período </b></span>
+					<p style="text-align: center;">
+						@periodo.creditosTotal() Créditos<br>
+						Dificuldade @periodo.getDificuldadePeriodo()
+					</span>
+					<hr style="border: 1px dotted grey;">
+				</div>
 			
 			
 			@for(disciplina <- periodo.getDisciplinas()){
 				@if(planoDeCurso.temRequisitosDesalocados(disciplina.getId())){
-					<div class="disciplina" style="position:relative; background: orange;">
+					<div class="disciplina" style="background: orange;">
 				}else{
-					<div class="disciplina" style="position:relative;">
-				}	<nome>@disciplina.getNomeCadeira()</nome><br>
-					<descricao>@disciplina.getCreditos() Créditos</descricao><br>
-					<p style="font-size:small;">Dificuldade: @disciplina.getDificuldade</p>					
-					<form  name="delete" id="delete" method="post" action="@routes.Application.removerCadeira()">
-						<input type="hidden" name="idDisciplina" id="idDisciplina" value="@disciplina.getId()"/>
-						<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
-						<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>				
+					<div class="disciplina">
+				}		<nome>@disciplina.getNomeCadeira()</nome>
+						<info>Créditos: @disciplina.getCreditos() </info>
+						<info>Dificuldade: @disciplina.getDificuldade</info>					
 						
-				
-						<button type="submit" class="btn btn-danger btn-xs" style="position:absolute; bottom: 3%; left: 34%;" >
-							<span style="font-size:xx-small;">Remover</span>
-						</button>
-					
-					</form>
-					
-					<form id="realocarCadeira" method="post" action="@routes.Application.realocarCadeira()">
-						<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
-						<input type="hidden" name="idDisciplina" id="idDisciplina" value="@disciplina.getId()"/>
-						<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>	
-					
-					<label><small>Período:&nbsp;</small></label><select name="realoca_selecionado">
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-				</select>
-					<input name="nomeCadeira" type="hidden" value="@disciplina.getNomeCadeira()">
-					<button type="submit" class="btn btn-success btn-xs" style="bottom: 3%; left: 34%;" >
-						<span style="font-size:xx-small;">Realocar</span>
-					</button>
-					
-					
-					</form>
-					
+						<div class="realocacao">					
+							<form id="realocarCadeira" method="post" action="@routes.Application.realocarCadeira()">
+								<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
+								<input type="hidden" name="idDisciplina" id="idDisciplina" value="@disciplina.getId()"/>
+								<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>
+								<input name="nomeCadeira" type="hidden" value="@disciplina.getNomeCadeira()">
+								<br>
+								<span1>Período:</span1>
+								<select name="realoca_selecionado">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+								</select>
+						</div>
+						<div class="botoes">	
+								<button type="submit" class="btn btn-success btn-xs btn-left pull-left">
+									<span style="font-size:xx-small;">Realocar</span>
+								</button>
+							</form>
+						
+						<form  name="delete" id="delete" method="post" action="@routes.Application.removerCadeira()">
+							<input type="hidden" name="idDisciplina" id="idDisciplina" value="@disciplina.getId()"/>
+							<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
+							<input type="hidden" name="periodo" id="periodo" value="@{periodos.indexOf(periodo)}"/>
+							<button type="submit" class="btn btn-danger btn-xs btn-right pull-right">
+								<span style="font-size:xx-small;">Remover</span>
+							</button>
+						</div>
+						</form>
 				</div>
 			}
 			</div>
