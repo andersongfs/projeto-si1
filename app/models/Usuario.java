@@ -6,6 +6,8 @@ import javax.persistence.*;
 import play.db.ebean.*;
 import com.avaje.ebean.*;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 @Entity
 @Table(name = "Usuario")
 public class Usuario extends Model{
@@ -26,7 +28,7 @@ public class Usuario extends Model{
 	public Usuario(String email, String nome, String senha, PlanoDeCurso plano){
 		this.nome = nome;
 		this.email = email;
-		this.senha = senha;
+		this.senha = BCrypt.hashpw(senha, BCrypt.gensalt());
 		this.periodoAtual = periodoAtual;
 		this.plano = plano;
 	}
@@ -69,6 +71,10 @@ public class Usuario extends Model{
 	public int getPeriodoAtual() {
 		return periodoAtual;
 	}
+	
+	 private String getSenha() {		  
+		 return this.senha;
+	 }
 
 	/**
 	 * @param periodoAtual the periodoAtual to set
@@ -100,10 +106,17 @@ public class Usuario extends Model{
 	
 
 
+	
 	public static Usuario authenticate(String email, String password) {
-        return find.where().eq("email", email)
-            .eq("senha", password).findUnique();
-    }
+		Usuario u = find.where().eq("email", email).findUnique();
+		if (u != null) {
+			if (BCrypt.checkpw(password, u.getSenha())) {
+				return u;
+			}
+		}
+		return null;
+	}
+
 
 
 }
