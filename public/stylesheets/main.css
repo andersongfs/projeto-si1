@@ -9,7 +9,7 @@ descricao {
 }
 
 nome-principal {
-	color: #000099;
+	color: #0960f7;
 	font-size: 25px;
 	font-weight: bold;
 }
@@ -70,6 +70,8 @@ nome-principal {
 
 .disciplina {
 	background-color: #FFFFFF;
+	border-color: #d8e2eb;
+	border-style:solid;
 	margin:auto;
 	margin-top:6px;
 	width: 138px;

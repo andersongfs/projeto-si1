@@ -1,4 +1,4 @@
-@(planoDeCurso: PlanoDeCurso, periodos: List[Periodo],disciplinas: List[Disciplina], errorMessage: String, disciplinaComDependentes: String, periodo: Integer)
+@(planoDeCurso: PlanoDeCurso, periodoAtual:Integer, periodos: List[Periodo],disciplinas: List[Disciplina], errorMessage: String, disciplinaComDependentes: String, periodo: Integer)
 
 @import helper._ 
 <head>
@@ -20,6 +20,7 @@
 		}
 	}
 </script>
+
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav"
 	role="banner">
 	<div class="navbar-inverse">
@@ -42,10 +43,32 @@
 	<div id="errorMessage" class="alert alert-warning alert-dismissable text-center">
 		@errorMessage <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 	</div>
-}
-
-
-	<div id="colunas">
+}	
+	<div class="container">
+		<form id="periodoAtual" method="POST" action="@routes.Application.atualizaPerAtual()">
+	    	<label><small>Selecionar Período Atual:&nbsp;</small></label>
+		   	<select name="periodoAtual">
+			     <option value="1">1</option>
+			     <option value="2">2</option>
+			     <option value="3">3</option>
+			     <option value="4">4</option>
+			     <option value="5">5</option>
+			     <option value="6">6</option>
+			     <option value="7">7</option>
+			     <option value="8">8</option>
+		   	</select>
+		   <button type="submit" class="btn btn-success btn-xs">
+		    	<span style="font-size:xx-small;">Atualizar</span>
+		   </button>
+	  </form>
+  	</div>
+  	<label>Periodo Atual: @{planoDeCurso.getPeriodoAtual()+1}  º Periodo </label><br>
+  	<label>Creditos Pagos: @planoDeCurso.calculaCreditosPagos()</label><br>
+  	<label>Creditos Cursando: @planoDeCurso.calculaCreditosCursando()</label><br>
+  	<label>Creditos Planejados: @planoDeCurso.calculaCreditosPlanejados()</label>
+  
+	<div id="colunas" style="width:100%; height: 900px; overflow-x:scroll; ">
+	<div id="colunas" style="width:110%;">
 		@for(periodo <- periodos){
 			<div id="c@{periodos.indexOf(periodo)+1}" class="coluna" style="text-align:center; width:160px; height:800px ">
 				<div class="titulo-periodo">
@@ -105,6 +128,7 @@
 			}
 			</div>
 		} 
+	</div>
 	</div>
 	
 	<div class="titulo" style="margin-top: 180px;">

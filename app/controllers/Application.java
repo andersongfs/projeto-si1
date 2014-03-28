@@ -92,8 +92,7 @@ public class Application extends Controller {
 	public static Result atualizaPerAtual(){
 		DynamicForm formDisciplina = new DynamicForm();
 		final DynamicForm form = formDisciplina.bindFromRequest();
-		final int periodoAtual = Integer.parseInt(form.get("periodoAtual"));
-		System.out.println(periodoAtual);
+		final int periodoAtual = Integer.parseInt(form.get("periodoAtual"))-1;
 		planoDeCurso.setPeriodoAtual(periodoAtual);
 		planoDeCurso.save();
 		
