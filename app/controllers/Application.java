@@ -31,7 +31,7 @@ public class Application extends Controller {
 		}else{
 			planoDeCurso = plano;
 		}
-		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
+		return ok(index.render(planoDeCurso,usuario.getPlano().getPeriodoAtual(), planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 	}
 
 	public static Result addCadeira() {
@@ -43,9 +43,9 @@ public class Application extends Controller {
 			Disciplina disciplina = Disciplina.find.byId(idDisciplina);
 			planoDeCurso.addCadeiraNoPeriodo(periodo,disciplina);
 			planoDeCurso.update();
-			return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
+			return ok(index.render(planoDeCurso,usuario.getPlano().getPeriodoAtual(), planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 		} catch (LimitesExcedidosException e) {
-			return badRequest(index.render(planoDeCurso,
+			return badRequest(index.render(planoDeCurso,usuario.getPlano().getPeriodoAtual(),
 					planoDeCurso.getPeriodos(),
 					planoDeCurso.getCadeirasDisponiveis(),
 					"Limite de Creditos no periodo excedido.", null,
@@ -67,7 +67,7 @@ public class Application extends Controller {
 		final Long idDisciplina = Long.parseLong(form.get("idDisciplina"));
 		planoDeCurso.removeCadeira(periodo, idDisciplina);
 		planoDeCurso.update();
-		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
+		return ok(index.render(planoDeCurso,usuario.getPlano().getPeriodoAtual(), planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 		}
 
 	public static Result realocarCadeira()
@@ -85,7 +85,19 @@ public class Application extends Controller {
 		planoDeCurso.realocaCadeiras(periodo, periodoARealocar - 1,
 				disciplina);
 		planoDeCurso.update();
-		return ok(index.render(planoDeCurso, planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
+		return ok(index.render(planoDeCurso,usuario.getPlano().getPeriodoAtual(), planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
+
+	}
+	
+	public static Result atualizaPerAtual(){
+		DynamicForm formDisciplina = new DynamicForm();
+		final DynamicForm form = formDisciplina.bindFromRequest();
+		final int periodoAtual = Integer.parseInt(form.get("periodoAtual"));
+		System.out.println(periodoAtual);
+		planoDeCurso.setPeriodoAtual(periodoAtual);
+		planoDeCurso.save();
+		
+		return ok(index.render(planoDeCurso,usuario.getPlano().getPeriodoAtual(), planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 
 	}
 
