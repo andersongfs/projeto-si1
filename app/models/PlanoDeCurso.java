@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import play.db.ebean.Model;
+import scalaz.Each;
 
 import com.avaje.ebean.Ebean;
 
@@ -30,6 +31,8 @@ public class PlanoDeCurso extends Model {
 	@JoinTable(name = "plano_periodo")
 	private List<Periodo> periodos;
 	final int NUMERO_PERIODOS = 8;
+	private final int PRIMEIRO_PERIODO = 0;
+	private int periodoAtual;
 
 	// CREATOR: PlanoDeCurso faz uso direto do CatalogoDeDisciplina
 //	@ManyToOne
@@ -48,6 +51,7 @@ public class PlanoDeCurso extends Model {
 		periodos = new ArrayList<Periodo>();
 		disciplinasNaoAlocadas = new ArrayList<Disciplina>();
 		inicializarPeriodos();
+		periodoAtual = PRIMEIRO_PERIODO;
 	//	popularDisciplinasNaoAlocadas();
 	}
 
@@ -462,6 +466,36 @@ public class PlanoDeCurso extends Model {
 	
 	public void addNasNaoAlocadas(Disciplina d){
 		disciplinasNaoAlocadas.add(d);
+	}
+
+	public int getPeriodoAtual() {
+		return periodoAtual;
+	}
+
+	public void setPeriodoAtual(int periodoAtual) {
+		this.periodoAtual = periodoAtual;
+	}
+	
+	public int calculaCreditosPagos(){
+		int creditosPagos = 0;
+		for(int i = 0; i < this.periodoAtual; i++){
+			creditosPagos += this.getPeriodo(i).getTotalCreditos();
+		}
+		return creditosPagos;
+	}
+	
+	public int calculaCreditosCursando(){
+		return this.getPeriodo(periodoAtual).getTotalCreditos();
+	}
+	
+	public int calculaCreditosPlanejados(){
+		int creditosPlanejados = 0;
+		for (Periodo p : periodos) {
+			creditosPlanejados += p.getTotalCreditos();
+			
+		}
+		return creditosPlanejados;
+		
 	}
 	
 	

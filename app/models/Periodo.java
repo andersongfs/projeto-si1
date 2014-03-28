@@ -140,6 +140,15 @@ public class Periodo extends Model {
 		Periodo p = find.ref(id);
 		p.update();
 	}
+
+
+	public int getTotalCreditos() {
+		int totalCreditos = 0;
+		for(Disciplina d: this.disciplinas){
+			totalCreditos += d.getCreditos();
+		}
+		return totalCreditos;
+	}
 	
 	
 	

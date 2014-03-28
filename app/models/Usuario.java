@@ -12,7 +12,6 @@ import org.mindrot.jbcrypt.BCrypt;
 @Table(name = "Usuario")
 public class Usuario extends Model{
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
@@ -20,7 +19,6 @@ public class Usuario extends Model{
 	private String nome;
 	private String email;
 	private String senha;
-	private int periodoAtual;
 	@OneToOne(cascade=CascadeType.ALL)
 	private PlanoDeCurso plano;
 
@@ -29,7 +27,6 @@ public class Usuario extends Model{
 		this.nome = nome;
 		this.email = email;
 		this.senha = BCrypt.hashpw(senha, BCrypt.gensalt());
-		this.periodoAtual = periodoAtual;
 		this.plano = plano;
 	}
 	
@@ -65,23 +62,11 @@ public class Usuario extends Model{
 		this.email = email;
 	}
 
-	/**
-	 * @return the periodoAtual
-	 */
-	public int getPeriodoAtual() {
-		return periodoAtual;
-	}
 	
 	 private String getSenha() {		  
 		 return this.senha;
 	 }
 
-	/**
-	 * @param periodoAtual the periodoAtual to set
-	 */
-	public void setPeriodoAtual(int periodoAtual) {
-		this.periodoAtual = periodoAtual;
-	}
 
 	/**
 	 * @return the plano
@@ -116,7 +101,7 @@ public class Usuario extends Model{
 		}
 		return null;
 	}
-
+	
 
 
 }
