@@ -15,7 +15,7 @@ public class BehaviourTest {
 
 	private PlanoDeCurso controlador;
 	private Usuario user;
-	private PlanoDeCurso userPlan;
+	
 	
 	@Before
 	public void setUp(){
@@ -106,7 +106,7 @@ public class BehaviourTest {
 		assertEquals("teste@teste", user.getEmail());
 		assertEquals("teste", user.getNome());
 		
-		assertTrue(user.getPlano().equals(userPlan));
+		assertTrue(user.getPlano().equals(controlador));
 		
 	}
 	
