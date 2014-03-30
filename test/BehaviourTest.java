@@ -20,8 +20,7 @@ public class BehaviourTest {
 	@Before
 	public void setUp(){
 		controlador = new PlanoDeCurso();
-		userPlan = new PlanoDeCurso();
-		user = new Usuario("teste@teste", "teste", "123456", userPlan);
+		user = new Usuario("teste@teste", "teste", "123456", controlador);
 
 	}
 	
@@ -35,59 +34,70 @@ public class BehaviourTest {
 	@Test
 	public void testaAdicionarCadeiraQueTemPrerequisito(){
 		
+		
+		
 	}
 	
 	@Test 
 	public void removerCadeiraSemDependentes() throws LimitesExcedidosException, PrerequisitosInsuficientesException, JaContemDisciplinaException{
-		controlador.addCadeiraNoPeriodo(1, new Disciplina("CALC II"));
-		assertTrue(controlador.getPeriodo(1).contains(new Disciplina("CALC II", 4)));
-		controlador.removeCadeira(1, controlador.getCadeira("CALC II").getId());
-		assertTrue(!controlador.getPeriodo(1).contains(new Disciplina("CALC II", 4)));
+		Disciplina calcII = Disciplina.find.byId(Long.parseLong("10"));
+		user.getPlano().getPeriodo(1).addCadeira(calcII);
+		assertTrue(user.getPlano().getPeriodo(1).contains(calcII));
+		//controlador.removeCadeira(1, );
+		//assertTrue(!controlador.getPeriodo(1).contains(calcII));
 	}
 	
 	@Test
 	public void removerCadeiraComDependentes() throws LimitesExcedidosException, PrerequisitosInsuficientesException, JaContemDisciplinaException{
-		controlador.addCadeira(1, "CALC II");
-		controlador.addCadeira(2, "PROBABILIDADE");
-		assertTrue(controlador.getPeriodo(1).contains(new Disciplina("CALC II", 4)));
-		assertTrue(controlador.getPeriodo(2).contains(new Disciplina("PROBABILIDADE", 4)));
-		controlador.removeCadeira(1, "CALC II");
-		assertTrue(!controlador.getPeriodo(2).contains(new Disciplina("PROBABILIDADE", 4)));
-		assertTrue(!controlador.getPeriodo(1).contains(new Disciplina("CALC II", 4)));
+		 Disciplina calcII = Disciplina.find.byId(Long.parseLong("10"));
+	     Disciplina prob = Disciplina.find.byId(Long.parseLong("17"));
+		 prob.addRequisitos(calcII);
+		
+		controlador.addCadeiraNoPeriodo(1, calcII);
+		controlador.addCadeiraNoPeriodo(2, prob);
+		assertTrue(controlador.getPeriodo(1).contains(calcII));
+		assertTrue(controlador.getPeriodo(2).contains(prob));
+		controlador.removeCadeira(1, calcII.getId());
+		assertTrue(!controlador.getPeriodo(2).contains(prob));
+		assertTrue(!controlador.getPeriodo(1).contains(calcII));
 			
 	}
 	
 	@Test
-	public void estourarCreditosDoPeriodo() throws JaContemDisciplinaException {
+	public void estourarCreditosDoPeriodo() throws JaContemDisciplinaException, PrerequisitosInsuficientesException {
 		try {
-			controlador.addCadeira(1, "CALC II");
-			controlador.addCadeira(1, "LPROG2");
-			controlador.addCadeira(1, "PROG2");
-			controlador.addCadeira(1, "DISCRETA");
-			controlador.addCadeira(1, "FFC");
-			controlador.addCadeira(1, "LINEAR");
-			controlador.addCadeira(1, "OPTATIVA 1");
+			controlador.addCadeiraNoPeriodo(1, new Disciplina("CALC II",4));
+			controlador.addCadeiraNoPeriodo(1, new Disciplina("LPROG2",4));
+			controlador.addCadeiraNoPeriodo(1, new Disciplina("PROG2",4));
+			controlador.addCadeiraNoPeriodo(1, new Disciplina("DISCRETA",4));
+			controlador.addCadeiraNoPeriodo(1, new Disciplina("FFC",4));
+			controlador.addCadeiraNoPeriodo(1, new Disciplina("LINEAR",4));
+			controlador.addCadeiraNoPeriodo(1, new Disciplina("OPTATIVA 1",4));
+			
 			assertEquals(controlador.getPeriodo(1).creditosTotal(), controlador.getPeriodo(1).LIMITE_CREDITOS);
-			controlador.addCadeira(1, "OPTATIVA 2");
+			controlador.addCadeiraNoPeriodo(1, new Disciplina("OPTATIVA 2",4));
 			fail();
 		} catch (LimitesExcedidosException e) {
 			assertTrue(e instanceof LimitesExcedidosException); 
 			// dumb ain't it?
-		} catch (PrerequisitosInsuficientesException pie){
-			fail();
 		}		
 	}
 	
 	@Test
 	public void realocarCadeira() throws PrerequisitosInsuficientesException, LimitesExcedidosException, JaContemDisciplinaException{
-		controlador.addCadeira(1, "CALC II");
-		controlador.addCadeira(2, "PROBABILIDADE");
-		controlador.addCadeira(1, "DISCRETA");
-		assertTrue(controlador.getPeriodo(1).contains(catalogo.getCadeira("DISCRETA")));
+		Disciplina discreta = new Disciplina("DISCRETA");
+		Disciplina  prob = new Disciplina("PROBABILIDADE");
+		Disciplina calcII = new Disciplina("CALC II");
 		
-		controlador.realocaCadeiras(1, 2, "DISCRETA");
-		assertFalse(controlador.getPeriodo(1).contains(catalogo.getCadeira("DISCRETA")));
-		assertTrue(controlador.getPeriodo(2).contains(catalogo.getCadeira("DISCRETA")));
+		
+		controlador.addCadeiraNoPeriodo(1, calcII);
+		controlador.addCadeiraNoPeriodo(2, prob);
+		controlador.addCadeiraNoPeriodo(1,discreta);
+		assertTrue(controlador.getPeriodo(1).getDisciplinas().contains(controlador.getCadeira("DISCRETA")));
+		
+		controlador.realocaCadeiras(1, 2, discreta);
+		assertFalse(controlador.getPeriodo(1).contains(controlador.getCadeira("DISCRETA")));
+		assertTrue(controlador.getPeriodo(2).contains(controlador.getCadeira("DISCRETA")));
 	}
 	
 	@Test
