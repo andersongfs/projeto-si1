@@ -8,14 +8,17 @@ import java.util.*;
 public class Global extends GlobalSettings{
 	
 	private int NUMERO_PERIODOS = 8;
+	private final int NUMERO_DE_USUARIOS_PADRAO = 30;
+
 	public Logger log = new Logger();
-	
 	@Override
 	public void onStart(Application app){
 		povoaBd();
+		log.info("Disciplinas Criadas - BD Povoado");
 		if(Usuario.find.findRowCount() == 0){
 			Usuario admin = new Usuario("admin@admin", "admin", "admin", new PlanoDeCurso());
 			admin.save();
+			criaTrintaUsuarios();
 		}
 	}
 	
@@ -175,7 +178,6 @@ public class Global extends GlobalSettings{
 	private void addRequisitos(String disciplina, String requisito){
 		Disciplina d = getDisciplina(disciplina);
 		d.addRequisitos(getDisciplina(requisito));
-		log.info(""+getDisciplina(disciplina).getRequisitos().size());
 		d.update();
 	}
 	
@@ -184,7 +186,6 @@ public class Global extends GlobalSettings{
 		for (Disciplina req : requisitos) {
 			d.addRequisitos(req);
 		}
-		log.info(""+getDisciplina(disciplina).getRequisitos().size());
 		d.update();
 	}
 
@@ -192,5 +193,13 @@ public class Global extends GlobalSettings{
 	private void criaDisciplina(String nome, int creditos, int dificuldade, int periodoPadrao) {
 		Disciplina d = new Disciplina(nome,creditos,dificuldade,periodoPadrao);
 		d.save();
+	}
+	
+	private void criaTrintaUsuarios(){
+		log.info("Usuarios criados");
+		for (int i = 0; i < NUMERO_DE_USUARIOS_PADRAO; i++ ){
+			Usuario user = new Usuario("user"+i+"@email.com" , "user"+i, "user"+i, new PlanoDeCurso());
+			user.save();
+		}
 	}
 }
