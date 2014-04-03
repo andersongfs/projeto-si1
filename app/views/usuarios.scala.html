@@ -1,0 +1,15 @@
+@(usuarios : List[Usuario])
+
+@import helper._ 
+<head>
+<meta charset="UTF-8">
+</head>
+
+<div class="container">
+	@for(usuario <- usuarios){
+		<div>
+		<button type="button" class="btn btn-primary"  onclick="location.href = '@routes.Application.exibeGrade(usuario.getEmail())';">@usuario.getNome()</button>
+			
+		</div>
+	}
+</div>

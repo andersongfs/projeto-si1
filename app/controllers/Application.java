@@ -99,5 +99,16 @@ public class Application extends Controller {
 		return ok(index.render(planoDeCurso,usuario.getPlano().getPeriodoAtual(), planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 
 	}
+	
+	public static Result listaUsuarios(){
+		List<Usuario> usuariosDoSistema = Usuario.find.all();
+		
+		return ok(usuarios.render(usuariosDoSistema));
+	}
+	
+	public static Result exibeGrade(String email){
+		Usuario usuario = Usuario.find.where().eq("email", email).findUnique();
+		return ok(gradeDoOutro.render(usuario, usuario.getPlano().getPeriodos(), usuario.getPlano()));
+	}
 
 }

@@ -1,0 +1,39 @@
+@(usuario : Usuario, periodos : List[Periodo], planoDeCurso: PlanoDeCurso)
+
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<div id="colunas" style="width:100%; height: 900px; overflow-x:scroll; ">
+	<div id="colunas" style="width:110%;">
+		@for(periodo <- periodos){
+			<div id="c@{periodos.indexOf(periodo)+1}" class="coluna" style="text-align:center; width:160px; height:800px ">
+				<div class="titulo-periodo">
+					<span><b>@{periodos.indexOf(periodo)+1}º Período </b></span>
+					<p style="text-align: center;">
+						@periodo.creditosTotal() Créditos<br>
+						Dificuldade @periodo.getDificuldadePeriodo()
+					</span>
+					<hr style="border: 1px dotted grey;">
+				</div>
+			
+			
+			@for(disciplina <- periodo.getDisciplinas()){
+				@if(planoDeCurso.temRequisitosDesalocados(disciplina.getId())){
+					<div class="disciplina" style="background: orange;">
+				}else{
+					<div class="disciplina">
+				}		<nome>@disciplina.getNomeCadeira()</nome>
+						<info>Créditos: @disciplina.getCreditos() </info>
+						<info>Dificuldade: @disciplina.getDificuldade</info>					
+						
+										</div>
+			}
+			</div>
+		} 
+	</div>
+	</div>
+	</div>
+
+	
