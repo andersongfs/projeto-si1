@@ -4,6 +4,7 @@ package models;
 import javax.persistence.*;
 
 import play.db.ebean.*;
+
 import com.avaje.ebean.*;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -89,7 +90,7 @@ public class Usuario extends Model{
 		this.senha = senha;
 	}
 	
-
+    
 
 	
 	public static Usuario authenticate(String email, String password) {
@@ -100,6 +101,10 @@ public class Usuario extends Model{
 			}
 		}
 		return null;
+	}
+
+	public String getId() {
+		return id.toString();
 	}
 	
 
