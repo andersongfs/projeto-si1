@@ -24,7 +24,7 @@ public class Application extends Controller {
 		PlanoDeCurso plano = usuario.getPlano();
 	
 		if (plano == null) {
-			plano = new PlanoDeCurso();
+			plano = new PlanoDeCurso(1);
 			planoDeCurso = plano;
 			planoDeCurso.save();			
 

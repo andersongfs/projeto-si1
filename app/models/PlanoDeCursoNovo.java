@@ -1,6 +1,5 @@
 package models;
 
-import javax.persistence.Entity;
 
 public class PlanoDeCursoNovo implements PreenchedorDePlano{
 
@@ -38,7 +37,7 @@ public class PlanoDeCursoNovo implements PreenchedorDePlano{
 			plano.addCadeira("Lab Org e Arq de Computadores", 4, 5, 3);
 			
 			//5 periodo
-			plano.addCadeira("Estatistia Aplicada", 4, 5, 4);
+			plano.addCadeira("Estatistica Aplicada", 4, 5, 4);
 			plano.addCadeira("Analise de Sistemas", 4, 4, 4);
 			plano.addCadeira("Engenharia de Software", 4, 4, 4);
 			plano.addCadeira("Redes de Comp", 4, 4, 4);
@@ -67,14 +66,42 @@ public class PlanoDeCursoNovo implements PreenchedorDePlano{
 			plano.addCadeira("Trabalho de Conclusao de Curso I", 4, 5, 7);
 			
 			//9 periodo
-			plano.addCadeira("Projeto em computacao II", 4, 5, 8);
+			plano.addCadeira("Projeto em Computacao II", 4, 5, 8);
 			plano.addCadeira("Optativa Especifica VII", 4, 5, 8);
 			plano.addCadeira("Optativa Especifica VIII", 4, 5, 8);
 			plano.addCadeira("Optativa Especifica IX", 4, 5, 8);
 			plano.addCadeira("Optativa Especifica X", 4, 5, 8);
 			plano.addCadeira("Trabalho de Conclusao de Curso II", 4, 5, 8);
+			
+			plano.save();
+			
+			//adicionando requisitos
+			plano.getCadeira("Matematica Discreta II").addRequisitos(plano.getCadeira("Matematica Discreta I"));
+			plano.getCadeira("Programação II").addRequisitos(plano.getCadeira("Programação I"));
+			plano.getCadeira("Programação II").addRequisitos(plano.getCadeira("Lab Programação I"));
 
+			plano.getCadeira("Algebra Linear").addRequisitos(plano.getCadeira("Matematica Discreta I"));
+			plano.getCadeira("Calculo II").addRequisitos(plano.getCadeira("Calculo I"));
+			plano.getCadeira("Estrutura de Dados").addRequisitos(plano.getCadeira("Programacão II"));
+			plano.getCadeira("Estrutura de Dados").addRequisitos(plano.getCadeira("Lab Programacão II"));
+			plano.getCadeira("Lab Estrutura de Dados").addListaRequisitos(plano.getCadeira("Estrutura de Dados").getRequisitos());
+			plano.getCadeira("Logica").addRequisitos(plano.getCadeira("Matematica Discreta I"));
+			
+			plano.getCadeira("Introd a Probabilidade").addRequisitos(plano.getCadeira("Matematica Discreta II"));
+			plano.getCadeira("Introd a Probabilidade").addRequisitos(plano.getCadeira("Calculo I"));
+			plano.getCadeira("Banco de Dados I").addRequisitos(plano.getCadeira("Estrutura de Dados"));
+			
+			plano.getCadeira("Estatistica Aplicada").addRequisitos(plano.getCadeira("Introd a Probabilidade"));
+			plano.getCadeira("Teoria da Computacao").addRequisitos(plano.getCadeira("PLP"));
 
+			plano.getCadeira("Prog Concorrente").addRequisitos(plano.getCadeira("Sistemas Operacionais"));
+			plano.getCadeira("Intelig Artificial").addRequisitos(plano.getCadeira("Teoria da Computacao"));
+			
+			plano.getCadeira("Projeto em Computacao I").addRequisitos(plano.getCadeira("Engenharia de Software"));
+			
+			plano.getCadeira("Projeto em Computacao II").addRequisitos(plano.getCadeira("Projeto em Computacao I"));
+			plano.getCadeira("Trabalho de Conclusao de Curso II").addRequisitos(plano.getCadeira("Trabalho de Conclusao de Curso I"));
+			
 		}catch (Exception e){
 			
 		}

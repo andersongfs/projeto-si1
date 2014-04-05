@@ -86,13 +86,10 @@ public class Autenticacao extends Controller {
 	}
 
 	private static void criarNovoUsuario(String email, String nome, String senha, int tipoPlano) {
-		PlanoDeCurso plano = new PlanoDeCurso();
-		plano.setPreenchedor(tipoPlano);
-		plano.povoaPlano();
+		PlanoDeCurso plano = new PlanoDeCurso(tipoPlano);
 		Usuario usuario = new Usuario(email, nome, senha, plano);
 		usuario.save();
 		Application.usuario = usuario;
-	
 		
 	}
 
