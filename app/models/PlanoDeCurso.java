@@ -11,12 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 
 import play.db.ebean.Model;
 
 @Entity
-public class PlanoDeCurso extends Model {
+public class PlanoDeCurso extends Model{
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +29,7 @@ public class PlanoDeCurso extends Model {
 	final int NUMERO_PERIODOS = 8;
 	private final int PRIMEIRO_PERIODO = 0;
 	private int periodoAtual;
-	
+	private PreenchedorDePlano preenchedor;
 	/*
 	 * INFORMATION EXPERT: PlanoDeCurso usa as disciplinas não alocadas para
 	 * decidir quem pode ser alocada, então ela precisa conhecer as disciplinas.
@@ -58,15 +57,23 @@ public class PlanoDeCurso extends Model {
 		for (int i = 0; i < NUMERO_PERIODOS; i++) {
 			periodos.add(new Periodo());
 		}
+
+	}
+	
+	public void povoaPlano(){
 		try{
-			for (Disciplina d : Disciplina.find.all()){
-				int periodo = d.getPeriodo();
-				periodos.get(periodo).addCadeira(d);
-			}
+			preenchedor.preenchePlanoDeCurso(this);
 		}catch (Exception e){
 			
 		}
-
+	}
+	
+	public void setPreenchedor(int tipoPlano){
+		if(tipoPlano == 1 ){
+			preenchedor = new PlanoDeCursoVelho();
+		}else if(tipoPlano == 2){
+			preenchedor = new PlanoDeCursoNovo();
+		}
 	}
 
 	/**
@@ -89,7 +96,7 @@ public class PlanoDeCurso extends Model {
 	}
 	
 	
-	private void addCadeira(String nome, int creditos, int dificuldade, int periodo) throws LimitesExcedidosException, JaContemDisciplinaException {
+	public void addCadeira(String nome, int creditos, int dificuldade, int periodo) throws LimitesExcedidosException, JaContemDisciplinaException {
 		Disciplina d = new Disciplina(nome,creditos,dificuldade,periodo); 
 		addCadeiraNoPeriodo(periodo, d);
 	}

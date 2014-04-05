@@ -61,13 +61,14 @@ public class Autenticacao extends Controller {
 		final String email = form.get("email");
 		final String senha = form.get("senha");
 		final String confirmaSenha = form.get("confirm_senha");
+		final int tipoPlano = Integer.parseInt(form.get("tipo_plano"));
 
 		novoCadastro = new CadastroDeUsuario(nome, email, senha, confirmaSenha);
 	
 
 		try {
 			if (novoCadastro.cadastroValido()) {
-				criarNovoUsuario(email, nome, senha);
+				criarNovoUsuario(email, nome, senha, tipoPlano);
 				flash("Cadastro_Sucesso", "Cadastro realizado com sucesso!");
 				return login();
 			}
@@ -84,8 +85,10 @@ public class Autenticacao extends Controller {
 		return badRequest(cadastro.render());
 	}
 
-	private static void criarNovoUsuario(String email, String nome, String senha) {
+	private static void criarNovoUsuario(String email, String nome, String senha, int tipoPlano) {
 		PlanoDeCurso plano = new PlanoDeCurso();
+		plano.setPreenchedor(tipoPlano);
+		plano.povoaPlano();
 		Usuario usuario = new Usuario(email, nome, senha, plano);
 		usuario.save();
 		Application.usuario = usuario;
