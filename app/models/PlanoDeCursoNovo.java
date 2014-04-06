@@ -12,7 +12,7 @@ public class PlanoDeCursoNovo implements PreenchedorDePlano{
 			plano.addCadeira("Lab Programação I", 4, 3, 0);
 			plano.addCadeira("Introdução a Computacao", 4, 3, 0);
 			plano.addCadeira("Optativa Geral I", 4, 3, 0);
-			
+
 			//2 periodo
 			plano.addCadeira("Matematica Discreta II", 4, 4, 1);
 			plano.addCadeira("Calculo I", 4, 5, 1);
@@ -73,8 +73,6 @@ public class PlanoDeCursoNovo implements PreenchedorDePlano{
 			plano.addCadeira("Optativa Especifica X", 4, 5, 8);
 			plano.addCadeira("Trabalho de Conclusao de Curso II", 4, 5, 8);
 			
-			plano.save();
-			
 			//adicionando requisitos
 			plano.getCadeira("Matematica Discreta II").addRequisitos(plano.getCadeira("Matematica Discreta I"));
 			plano.getCadeira("Programação II").addRequisitos(plano.getCadeira("Programação I"));
@@ -101,7 +99,6 @@ public class PlanoDeCursoNovo implements PreenchedorDePlano{
 			
 			plano.getCadeira("Projeto em Computacao II").addRequisitos(plano.getCadeira("Projeto em Computacao I"));
 			plano.getCadeira("Trabalho de Conclusao de Curso II").addRequisitos(plano.getCadeira("Trabalho de Conclusao de Curso I"));
-			
 		}catch (Exception e){
 			
 		}
