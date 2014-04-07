@@ -40,7 +40,9 @@ public class Autenticacao extends Controller {
 		final DynamicForm form = formDisciplina.bindFromRequest();
 		final String email = form.get("email");
 		final String senha = form.get("senha");
+		
 		Usuario usuarioTemp = Usuario.authenticate(email, senha);
+		
 		if (usuarioTemp != null) {
 			Application.usuario = usuarioTemp;
 			return Application.index(usuarioTemp);
@@ -86,7 +88,8 @@ public class Autenticacao extends Controller {
 	}
 
 	private static void criarNovoUsuario(String email, String nome, String senha, int tipoPlano) {
-		PlanoDeCurso plano = new PlanoDeCurso(tipoPlano);
+		PlanoDeCurso plano = new PlanoDeCurso();
+		plano.setPreenchedor(tipoPlano);
 		plano.save();
 		Usuario usuario = new Usuario(email, nome, senha, plano);
 		usuario.save();

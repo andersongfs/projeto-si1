@@ -38,12 +38,11 @@ public class PlanoDeCurso extends Model{
 	@JoinTable(name = "disciplinas_disponiveis")
 	private List<Disciplina> disciplinasNaoAlocadas;
 
-	public PlanoDeCurso(int tipoPlano) {
+	public PlanoDeCurso() {
 		periodos = new ArrayList<Periodo>();
 		disciplinasNaoAlocadas = new ArrayList<Disciplina>();
 		inicializarPeriodos();
 		periodoAtual = PRIMEIRO_PERIODO;
-		setPreenchedor(tipoPlano);
 	}
 
 	/**
@@ -74,6 +73,11 @@ public class PlanoDeCurso extends Model{
 		}else if(tipoPlano == 2){
 			periodos.add(new Periodo());
 			preenchedor = new PlanoDeCursoNovo();
+			povoaPlano();
+		}else if(tipoPlano == 3){
+			periodos.add(new Periodo());
+			periodos.add(new Periodo());
+			preenchedor = new PlanoDeCursoComum();
 			povoaPlano();
 		}
 	}

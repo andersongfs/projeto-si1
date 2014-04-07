@@ -7,19 +7,6 @@
 
 
 @main("Meu curso") {
-<script type="text/javascript">
-	function confirmaRemocaoComRequisito(nome, periodo){
-		if(confirm("A disciplina " + nome + " é dependência de outras disciplinas.\nDeseja remover mesmo assim?(a remoção dela implicará na remoção de seus pós requisitos)")){
-			 var campoNome =  document.getElementById('nomeCadeira');
-			 var campoPeriodo = document.getElementById('periodo');
-			 var formDelete = document.getElementById('delete');
-			 campoNome.value = nome;
-			 campoPeriodo.value = periodo;
-			 formDelete.submit();
-			 
-		}
-	}
-</script>
 
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav"
 	role="banner">
@@ -45,33 +32,37 @@
 		@errorMessage <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 	</div>
 }	
-	<div class="container">
-		<form id="periodoAtual" method="POST" action="@routes.Application.atualizaPerAtual()">
-	    	<label><small>Selecionar Período Atual:&nbsp;</small></label>
-		   	<select name="periodoAtual">
-			     <option value="1">1</option>
-			     <option value="2">2</option>
-			     <option value="3">3</option>
-			     <option value="4">4</option>
-			     <option value="5">5</option>
-			     <option value="6">6</option>
-			     <option value="7">7</option>
-			     <option value="8">8</option>
-		   	</select>
-		   <button type="submit" class="btn btn-success btn-xs">
-		    	<span style="font-size:xx-small;">Atualizar</span>
-		   </button>
-	  </form>
-  	</div>
-  	<label>Periodo Atual: @{planoDeCurso.getPeriodoAtual()+1}  º Periodo </label><br>
+
+	<div class="jumbotron" style="border-radius: 10px;">
+	<form id="periodoAtual" method="POST" action="@routes.Application.atualizaPerAtual()">
+    	<label>Selecionar Período Atual:&nbsp;</label>
+	   	<select name="periodoAtual">
+		     <option value="1">1</option>
+		     <option value="2">2</option>
+		     <option value="3">3</option>
+		     <option value="4">4</option>
+		     <option value="5">5</option>
+		     <option value="6">6</option>
+		     <option value="7">7</option>
+		     <option value="8">8</option>
+	   	</select>
+	   <button type="submit" class="btn btn-success">
+	    	<span>Atualizar</span>
+	   </button>
+    </form>
+    <div style="float: left">
+  	<label>Periodo Atual: @{planoDeCurso.getPeriodoAtual()+1}  º Periodo </label>&nbsp;&nbsp;&nbsp;
   	<label>Creditos Pagos: @planoDeCurso.calculaCreditosPagos()</label><br>
-  	<label>Creditos Cursando: @planoDeCurso.calculaCreditosCursando()</label><br>
+  	</div>
+  	<div style="float: right">
+  	<label>Creditos Cursando: @planoDeCurso.calculaCreditosCursando()</label>&nbsp;&nbsp;&nbsp;
   	<label>Creditos Planejados: @planoDeCurso.calculaCreditosPlanejados()</label>
-  
-	<div id="colunas" style="width:100%; height: 900px; overflow-x:scroll; ">
-	<div id="colunas" style="width:110%;">
+  	</div>
+  	</div>
+  	<div class="container">
+	<div id="colunas" style="width:100%; height: 900px;">
 		@for(periodo <- periodos){
-			<div id="c@{periodos.indexOf(periodo)+1}" class="coluna" style="text-align:center; width:160px; height:800px ">
+			<div id="c@{periodos.indexOf(periodo)+1}" class="coluna" style="text-align:center; width:160px; height:930px ">
 				<div class="titulo-periodo">
 					<span><b>@{periodos.indexOf(periodo)+1}º Período </b></span>
 					<p style="text-align: center;">
@@ -86,11 +77,9 @@
 				@if(planoDeCurso.temRequisitosDesalocados(disciplina.getId())){
 					<div class="disciplina" style="background: orange;">
 				}else{
-					<div class="disciplina">
+					<div class="disciplina" title="Créditos: @disciplina.getCreditos / Dificuldade: @disciplina.getDificuldade() ">
 				}		<nome>@disciplina.getNomeCadeira()</nome>
-						<info>Créditos: @disciplina.getCreditos() </info>
-						<info>Dificuldade: @disciplina.getDificuldade</info>					
-						
+
 						<div class="realocacao">					
 							<form id="realocarCadeira" method="post" action="@routes.Application.realocarCadeira()">
 								<input type="hidden" name="nomeCadeira" id="nomeCadeira" value="@disciplina.getNomeCadeira()"/>
@@ -131,21 +120,20 @@
 		} 
 	</div>
 	</div>
-	
+	</div>
 	<div class="titulo" style="margin-top: 180px;">
 			<nome-principal>Disciplinas Ofertadas (Quantidade: @disciplinas.size())</nome-principal>
 	</div>
 	<br/>
 	
-	
-	<div id="disciplinas" style="margin-left: 50px;">
+	<div class="container">
+	<div id="disciplinas">
 		
 		@for(disciplina <- disciplinas){
-			<div class="disciplina float-left">
+			<div class="disciplina float-left" title= "@disciplina.getCreditos() creditos / Dificuldade: @disciplina.getDificuldade()" >
 				<form id="addCadeira" method="POST" action="@routes.Application.addCadeira()">
 				
 				<nome>@disciplina.getNomeCadeira()</nome><br/>
-				<descricao>@disciplina.getCreditos() creditos<br>Dificuldade @disciplina.getDificuldade()</descricao>
 				<br>
 				<label><small>Período:&nbsp;</small></label><select name="periodo">
 						<option value="1">1</option>
@@ -158,20 +146,15 @@
 						<option value="8">8</option>
 				</select>
 					<input name="nomeCadeira" type="hidden" value="@disciplina.getNomeCadeira()">
-					<input name="idDisciplina" type="hidden" value="@disciplina.getId()">
-					<button type="submit" class="btn btn-success btn-xs">
+					<input name="idDisciplina" type="hidden" value="@disciplina.getId()"><br>
+					<button type="submit" class="btn btn-success btn-xs" style="margin-left: 14px; margin-top: 2px;">
 						 Adicionar
 					</button>
 				</form>
 			</div>
 		}
 	</div>
-	
-	@if(disciplinaComDependentes){
-		<script> 
-			confirmaRemocaoComRequisito('@disciplinaComDependentes', @periodo);  
-		</script>
-	}	
+	</div>
 
 </div>
 

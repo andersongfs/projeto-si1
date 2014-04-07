@@ -28,7 +28,8 @@ public class TesteComPersistencia {
 	@Before
 	public void setUp() {
 		start(fakeApplication(inMemoryDatabase()));
-		plano = new PlanoDeCurso(1);
+		plano = new PlanoDeCurso();
+		plano.setPreenchedor(1);
 		plano.save();
 		user = new Usuario("n@email.com", "nathan", "senha", plano);
 		user.save();
@@ -50,7 +51,8 @@ public class TesteComPersistencia {
 		 * A aplicação ja começa povoando todos os periodos, entao
 		 * para que o teste surta efeito, vamos remover e depois adicionar a mesma cadeira
 		 */
-		PlanoDeCurso p2 = new PlanoDeCurso(1);
+		PlanoDeCurso p2 = new PlanoDeCurso();
+		p2.setPreenchedor(1);
 		user.getPlano().removeCadeira(1, user.getPlano().getCadeira("Programacao II").getId());
 		user.update();
 		
@@ -105,7 +107,8 @@ public class TesteComPersistencia {
 	@Test 
 	public void testaUsuario(){
 		
-		PlanoDeCurso plano3 = new PlanoDeCurso(1);
+		PlanoDeCurso plano3 = new PlanoDeCurso();
+		plano3.setPreenchedor(1);
 		Usuario usuario = new Usuario("tiago@gmail.com", "tiago", "tiago1991", plano3);
 		usuario.save();
 		Assert.assertTrue(usuario.getPlano() == plano3);
@@ -116,7 +119,8 @@ public class TesteComPersistencia {
 	
 	@Test
 	public void testaComPlanoNovo(){
-		PlanoDeCurso plano4 = new PlanoDeCurso(1);
+		PlanoDeCurso plano4 = new PlanoDeCurso();
+		plano4.setPreenchedor(3);
 		Usuario user = new Usuario ("Nathan@email","nathan","123", plano4);
 		user.save();
 	}

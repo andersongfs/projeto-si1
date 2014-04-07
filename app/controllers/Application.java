@@ -21,16 +21,16 @@ public class Application extends Controller {
 
 	public static Result index(Usuario usuario) throws PrerequisitosInsuficientesException,
 			LimitesExcedidosException, JaContemDisciplinaException {
-		PlanoDeCurso plano = usuario.getPlano();
-	
-		if (plano == null) {
-			plano = new PlanoDeCurso(1);
-			planoDeCurso = plano;
-			planoDeCurso.save();			
-
-		}else{
-			planoDeCurso = plano;
-		}
+		planoDeCurso = usuario.getPlano();
+		System.out.println(planoDeCurso);
+//		if (plano == null) {
+//			plano = new PlanoDeCurso(1);
+//			planoDeCurso = plano;
+//			planoDeCurso.save();			
+//
+//		}else{
+//			planoDeCurso = plano;
+//		}
 		return ok(index.render(planoDeCurso,usuario.getPlano().getPeriodoAtual(), planoDeCurso.getPeriodos(), planoDeCurso.getCadeirasDisponiveis(), errorMessage, "", 0));
 	}
 
